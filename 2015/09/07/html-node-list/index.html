@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2015/09/07/html-node-list/index.html">
 <meta property="og:site_name" content="Horve的前端笔记">
 <meta property="og:description" content="副标题:  为何getElementsByTagName()比querySelectorAll()快100倍昨天,我在雅虎的同事 Scott Schiller (斯科特·席勒, 同时也是SoundManager创造者) 发Twitter询问为何 getElementsByTagName(&amp;quot;a&amp;quot;) 在所有浏览器上都比 querySelectorAll(&amp;quot;a&amp;quot;)">
-<meta property="og:updated_time" content="2015-09-14T02:38:46.000Z">
+<meta property="og:updated_time" content="2015-10-16T16:56:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DOM中的动态NodeList与静态NodeList">
 <meta name="twitter:description" content="副标题:  为何getElementsByTagName()比querySelectorAll()快100倍昨天,我在雅虎的同事 Scott Schiller (斯科特·席勒, 同时也是SoundManager创造者) 发Twitter询问为何 getElementsByTagName(&amp;quot;a&amp;quot;) 在所有浏览器上都比 querySelectorAll(&amp;quot;a&amp;quot;)">
@@ -120,14 +120,11 @@
 <p>如果真正的查看WebKit的源码,你会发现他为 <code>querySelectorAll()</code> 明确地 <a href="http://trac.webkit.org/browser/trunk/WebCore/dom/SelectorNodeList.cpp?rev=41093#L61" target="_blank" rel="external">创建一个返回对象</a> ,在其中又使用一个循环来获取每一个结果,并创建最终返回的一个 <code>NodeList</code>.</p>
 <h2 id="结论">结论</h2><p><code>getElementsByTagName()</code> 速度比 <code>querySelectorAll()</code> 快的根本原因在于<strong>动态NodeList</strong>和<strong>静态NodeList</strong>对象的不同。 尽管我可以肯定地说有某种方法来优化这一点, 在获取<code>NodeList</code>时不需要执行很多前期处理操作的动态列表,总比获取静态的集合(返回之前完成各种处理)要快很多。 哪个方法更好用主要还是看你的需求, 如果只是要根据 tag name 来查找元素, 也不需要获取此一个快照, 那就应该使用 <code>getElementsByTagName()</code>方法; 如果需要快照结果(静态),或者需要使用复杂的CSS查询, 则可以考虑 <code>querySelectorAll()</code>。</p>
 <p>原文链接: <a href="http://www.nczonline.net/blog/2010/09/28/why-is-getelementsbytagname-faster-that-queryselectorall/" target="_blank" rel="external">Why is getElementsByTagName() faster than querySelectorAll()?</a></p>
-<p>原文日期: 2010-09-28</p>
-<p>翻译日期: 2014-11-13</p>
-<p>标签: <a href="http://www.nczonline.net/blog/tag/getelementsbytagname/" target="_blank" rel="external">getElementsByTagName</a>, <a href="http://www.nczonline.net/blog/tag/javascript/" target="_blank" rel="external">JavaScript</a>, <a href="http://www.nczonline.net/blog/tag/nodelist/" target="_blank" rel="external">NodeList</a>, <a href="http://www.nczonline.net/blog/tag/queryselectorall/" target="_blank" rel="external">querySelectorAll</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/07/html-node-list/" data-id="ciftt8lm3000tg8s6hbpe35wb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/07/html-node-list/" data-id="ciftwdybr000nkms61t3ho43c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Live-Nodelist/">Live Nodelist</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Static-Nodelist/">Static Nodelist</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
@@ -138,11 +135,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/09/07/html-node-list副本/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/09/08/har-detail/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          DOM中的动态NodeList与静态NodeList
+          HAR文件详细解析
         
       </div>
     </a>
@@ -168,7 +165,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Live-Nodelist/">Live Nodelist</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Static-Nodelist/">Static Nodelist</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chrome/">chrome</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chrome-extension/">chrome-extension</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/har/">har</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/performance/">performance</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phantomjs/">phantomjs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端性能/">前端性能</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Live-Nodelist/">Live Nodelist</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Static-Nodelist/">Static Nodelist</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chrome/">chrome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chrome-extension/">chrome-extension</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chrome拓展/">chrome拓展</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/har/">har</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/performance/">performance</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phantomjs/">phantomjs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/前端性能/">前端性能</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原创/">原创</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -177,7 +174,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Live-Nodelist/" style="font-size: 15px;">Live Nodelist</a> <a href="/tags/Static-Nodelist/" style="font-size: 15px;">Static Nodelist</a> <a href="/tags/chrome/" style="font-size: 10px;">chrome</a> <a href="/tags/chrome-extension/" style="font-size: 10px;">chrome-extension</a> <a href="/tags/har/" style="font-size: 10px;">har</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/phantomjs/" style="font-size: 15px;">phantomjs</a> <a href="/tags/前端性能/" style="font-size: 10px;">前端性能</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/转载/" style="font-size: 20px;">转载</a>
+      <a href="/tags/Live-Nodelist/" style="font-size: 10px;">Live Nodelist</a> <a href="/tags/Static-Nodelist/" style="font-size: 10px;">Static Nodelist</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/chrome-extension/" style="font-size: 10px;">chrome-extension</a> <a href="/tags/chrome拓展/" style="font-size: 10px;">chrome拓展</a> <a href="/tags/har/" style="font-size: 10px;">har</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/phantomjs/" style="font-size: 15px;">phantomjs</a> <a href="/tags/前端性能/" style="font-size: 10px;">前端性能</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/转载/" style="font-size: 15px;">转载</a>
     </div>
   </div>
 
@@ -186,7 +183,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">6</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
@@ -198,15 +195,15 @@
       <ul>
         
           <li>
+            <a href="/2015/10/17/chrome-extension/">chrome拓展开发实战：页面脚本的拦截注入</a>
+          </li>
+        
+          <li>
             <a href="/2015/09/14/performanceAPI/">使用性能API快速分析web前端性能</a>
           </li>
         
           <li>
             <a href="/2015/09/08/har-detail/">HAR文件详细解析</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/07/html-node-list副本/">DOM中的动态NodeList与静态NodeList</a>
           </li>
         
           <li>
