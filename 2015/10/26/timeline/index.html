@@ -52,7 +52,7 @@
 <meta property="og:image" content="http://yoursite.com/images/timeline/timeline-6.png">
 <meta property="og:image" content="http://yoursite.com/images/timeline/timeline-7.png">
 <meta property="og:image" content="http://yoursite.com/images/timeline/timeline-8.png">
-<meta property="og:updated_time" content="2015-10-30T03:58:11.000Z">
+<meta property="og:updated_time" content="2015-10-30T06:46:43.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Chrome DevTools的Timeline分析页面性能">
 <meta name="twitter:description" content="随着webpage可以承载的表现形式更加多样化，通过webpage来实现更多交互功能，构建web应用程序已经成为很多产品的首要选择。这种方式拥有非常明显的优势：跨平台、开发便捷、便于部署和维护等等，但随着功能的不断积累，web应用程序也会变得越来越复杂。但是，我们仍然想要在webpage支持丰富的呈现形式的同时，让页面效果能够达到&amp;gt;=60fps(帧)/s的刷新频率以避免出现卡顿，就需要我们使">
@@ -252,6 +252,7 @@
 <blockquote>
 <p>为什么是60fps?<br>我们的目标是保证页面要有高于每秒60fps(帧)的刷新频率，这和目前大多数显示器的刷新率相吻合(60Hz)。如果网页动画能够做到每秒60帧，就会跟显示器同步刷新，达到最佳的视觉效果。这意味着，一秒之内进行60次重新渲染，每次重新渲染的时间不能超过16.66毫秒。</p>
 </blockquote>
+<a id="more"></a>
 <p>需求大体明确，就是要找到页面执行过程中的性能瓶颈。而Chrome DevTools的Timeline则正是用来记录和分析应用在运行时所有的活动情况，它是用来排查应用性能瓶颈的最佳工具。</p>
 <p>下图是Timeline面板的预览效果：</p>
 <p><img src="/images/timeline/timeline-preview.png" alt="Timeline预览效果图"></p>
@@ -519,6 +520,9 @@
 </tr>
 </tbody>
 </table>
+<h2 id="参考文档">参考文档</h2><p><a href="https://developers.google.com/chrome-developer-tools/docs/timeline" target="_blank" rel="external">https://developers.google.com/chrome-developer-tools/docs/timeline</a></p>
+<p><a href="http://www.w3cfuns.com/article-1248-1.html" target="_blank" rel="external">http://www.w3cfuns.com/article-1248-1.html</a></p>
+<p><a href="http://www.oschina.net/translate/performance-optimisation-with-timeline-profiles" target="_blank" rel="external">http://www.oschina.net/translate/performance-optimisation-with-timeline-profiles</a></p>
 </span>
       
     </div>
@@ -650,7 +654,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Timeline工具栏介绍"><span class="nav-number">1.</span> <span class="nav-text">Timeline工具栏介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件模式_(Event_Mode)"><span class="nav-number">2.</span> <span class="nav-text">事件模式 (Event Mode)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#帧模式_(Frame_Mode)"><span class="nav-number">3.</span> <span class="nav-text">帧模式 (Frame Mode)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TimeLine中的事件汇总"><span class="nav-number">5.</span> <span class="nav-text">TimeLine中的事件汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Loading事件"><span class="nav-number">5.1.</span> <span class="nav-text">Loading事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scripting事件"><span class="nav-number">5.2.</span> <span class="nav-text">Scripting事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rendering事件"><span class="nav-number">5.3.</span> <span class="nav-text">Rendering事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Painting事件"><span class="nav-number">5.4.</span> <span class="nav-text">Painting事件</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Timeline工具栏介绍"><span class="nav-number">1.</span> <span class="nav-text">Timeline工具栏介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事件模式_(Event_Mode)"><span class="nav-number">2.</span> <span class="nav-text">事件模式 (Event Mode)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#帧模式_(Frame_Mode)"><span class="nav-number">3.</span> <span class="nav-text">帧模式 (Frame Mode)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TimeLine中的事件汇总"><span class="nav-number">5.</span> <span class="nav-text">TimeLine中的事件汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Loading事件"><span class="nav-number">5.1.</span> <span class="nav-text">Loading事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scripting事件"><span class="nav-number">5.2.</span> <span class="nav-text">Scripting事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rendering事件"><span class="nav-number">5.3.</span> <span class="nav-text">Rendering事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Painting事件"><span class="nav-number">5.4.</span> <span class="nav-text">Painting事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
