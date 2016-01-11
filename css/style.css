@@ -926,7 +926,7 @@ a {
   color: #c8c8c8;
 }
 .article-title {
-  color: #696969;
+  color: #2c3f51 !important;
   margin-left: 0px;
   font-weight: 700;
   line-height: 35px;
