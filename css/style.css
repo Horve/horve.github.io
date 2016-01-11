@@ -906,6 +906,7 @@ a {
   margin-left: 200px;
   padding: 15px 0;
   margin-right: 75px;
+  font-family: "Helvetica Neue", Arial, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
 }
 .article-index .brief {
   display: block;
@@ -927,10 +928,10 @@ a {
 .article-title {
   color: #696969;
   margin-left: 0px;
-  font-weight: 300;
+  font-weight: 700;
   line-height: 35px;
-  margin-bottom: 20px;
-  font-size: 26px;
+  margin-bottom: 40px;
+  font-size: 2em;
   -webkit-transition: color 0.3s;
   -moz-transition: color 0.3s;
   -o-transition: color 0.3s;
@@ -972,6 +973,7 @@ a {
 .article-entry p {
   margin: 15px 0;
   font-family: "Helvetica Neue", Arial, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
+  color: #2c3f51 !important;
 }
 .article-entry p code,
 .article-entry li code {
