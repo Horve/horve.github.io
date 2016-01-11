@@ -970,7 +970,8 @@ a {
   padding-left: 30px;
 }
 .article-entry p {
-  margin-top: 10px;
+  margin: 15px 0;
+  font-family: "Helvetica Neue", Arial, "Hiragino Sans GB", STHeiti, "Microsoft YaHei";
 }
 .article-entry p code,
 .article-entry li code {
@@ -1027,11 +1028,12 @@ a {
   margin-top: 30px;
 }
 .article-entry h2 {
-  margin-top: 20px;
-  font-weight: 300;
+  margin-top: 40px;
+  padding-bottom: 20px;
+  font-weight: 700;
   color: #574c4c;
   padding-bottom: 5px;
-  border-bottom: 1px solid #ddd;
+  font-size: 2em;
 }
 .article-entry h3,
 .article-entry h4,
