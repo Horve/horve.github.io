@@ -995,6 +995,7 @@ a {
 }
 .article-entry blockquote p {
   margin-top: 0;
+  margin-bottom: 0;
 }
 .article-entry em {
   font-style: italic;
