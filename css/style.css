@@ -147,6 +147,7 @@ h1,
 h2,
 h3 {
   display: block;
+  color: #2c3f51 !important;
 }
 h1 {
   font-size: 1.5em;
