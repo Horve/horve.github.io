@@ -987,12 +987,12 @@ a {
     font-size: 14px;*/
   padding-right: 5px;
   color: #c7254e;
-  font-size: 0.7rem;
+  font-size: 1rem;
   font-weight: normal;
   font-family: Consolas, "Courier New", Courier, FreeMono, monospace;
-  background: #f9f2f4;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
+  background: #eee;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .article-entry blockquote {
   background: #ddd;
