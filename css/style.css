@@ -944,6 +944,9 @@ a {
 .article-title:hover {
   color: #b0a0aa;
 }
+.article-title.art-list-title {
+  font-size: 26px;
+}
 .article-inner {
   position: relative;
   margin-bottom: 20px;
