@@ -21,7 +21,7 @@ Table of Contents  generated with DocToc">
 <meta property="og:image" content="http://yoursite.com/images/fe/element-size.png">
 <meta property="og:image" content="http://yoursite.com/images/fe/element-mask.jpg">
 <meta property="og:image" content="http://yoursite.com/images/fe/tip-box.jpg">
-<meta property="og:updated_time" content="2016-03-02T07:17:13.000Z">
+<meta property="og:updated_time" content="2016-03-02T07:19:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端问题汇总">
 <meta name="twitter:description" content="&amp;lt;!-- START doctoc generated TOC please keep comment here to allow auto update --&amp;gt;
@@ -521,37 +521,166 @@ Table of Contents  generated with DocToc">
 <ul>
 <li><p>content方面</p>
 <ul>
+<li><ol>
 <li>减少HTTP请求：合并文件、CSS精灵、inline Image</li>
+</ol>
+</li>
+<li><ol>
 <li>减少DNS查询：DNS查询完成之前浏览器不能从这个主机下载任何任何文件。方法：DNS缓存、将资源分布到恰当数量的主机名，平衡并行下载和DNS查询</li>
+</ol>
+</li>
+<li><ol>
 <li>避免重定向：多余的中间访问</li>
-<li>使Ajax可缓存<br>非必须组件延迟加载<br>未来所需组件预加载<br>减少DOM元素数量<br>将资源放到不同的域下：浏览器同时从一个域下载资源的数目有限，增加域可以提高并行下载量<br>减少iframe数量<br>不要404</li>
+</ol>
+</li>
+<li><ol>
+<li>使Ajax可缓存</li>
+</ol>
+</li>
+<li><ol>
+<li>非必须组件延迟加载</li>
+</ol>
+</li>
+<li><ol>
+<li>未来所需组件预加载</li>
+</ol>
+</li>
+<li><ol>
+<li>减少DOM元素数量</li>
+</ol>
+</li>
+<li><ol>
+<li>将资源放到不同的域下：浏览器同时从一个域下载资源的数目有限，增加域可以提高并行下载量</li>
+</ol>
+</li>
+<li><ol>
+<li>减少iframe数量</li>
+</ol>
+</li>
+<li><ol>
+<li>不要404</li>
+</ol>
+</li>
 </ul>
 </li>
 <li><p>Server方面</p>
 <ul>
+<li><ol>
 <li>使用CDN</li>
+</ol>
+</li>
+<li><ol>
 <li>添加Expires或者Cache-Control响应头</li>
-<li>对组件使用Gzip压缩<br>配置ETag<br>Flush Buffer Early<br>Ajax使用GET进行请求<br>避免空src的img标签</li>
+</ol>
+</li>
+<li><ol>
+<li>对组件使用Gzip压缩</li>
+</ol>
+</li>
+<li><ol>
+<li>配置ETag</li>
+</ol>
+</li>
+<li><ol>
+<li>Flush Buffer Early</li>
+</ol>
+</li>
+<li><ol>
+<li>Ajax使用GET进行请求</li>
+</ol>
+</li>
+<li><ol>
+<li>避免空src的img标签</li>
+</ol>
+</li>
 </ul>
 </li>
-<li><p>Cookie方面</p>
-<ul>
+<li>Cookie方面<ul>
+<li><ol>
 <li>减小cookie大小</li>
+</ol>
+</li>
+<li><ol>
 <li>引入资源的域名不要包含cookie</li>
+</ol>
+</li>
 </ul>
 </li>
-<li><p>css方面</p>
-<ul>
+<li>css方面<ul>
+<li><ol>
 <li>将样式表放到页面顶部</li>
+</ol>
+</li>
+<li><ol>
 <li>不使用CSS表达式</li>
-<li>使用<link>不使用@import<br>不使用IE的Filter</li>
+</ol>
+</li>
+<li><ol>
+<li>使用<link>不使用@import</li>
+</ol>
+</li>
+<li><ol>
+<li>不使用IE的Filter</li>
+</ol>
+</li>
 </ul>
 </li>
-<li><p>Javascript方面<br>  将脚本放到页面底部<br>  将javascript和css从外部引入<br>  压缩javascript和css<br>  删除不需要的脚本<br>  减少DOM访问<br>  合理设计事件监听器</p>
+<li>Javascript方面<ul>
+<li><ol>
+<li>将脚本放到页面底部</li>
+</ol>
 </li>
-<li><p>图片方面<br>  优化图片：根据实际颜色需要选择色深、压缩<br>  优化css精灵<br>  不要在HTML中拉伸图片<br>  保证favicon.ico小并且可缓存</p>
+<li><ol>
+<li>将javascript和css从外部引入</li>
+</ol>
 </li>
-<li><p>移动方面<br>  保证组件小于25k<br>  Pack Components into a Multipart Document</p>
+<li><ol>
+<li>压缩javascript和css</li>
+</ol>
+</li>
+<li><ol>
+<li>删除不需要的脚本</li>
+</ol>
+</li>
+<li><ol>
+<li>减少DOM访问</li>
+</ol>
+</li>
+<li><ol>
+<li>合理设计事件监听器</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>图片方面<ul>
+<li><ol>
+<li>优化图片：根据实际颜色需要选择色深、压缩</li>
+</ol>
+</li>
+<li><ol>
+<li>优化css精灵</li>
+</ol>
+</li>
+<li><ol>
+<li>不要在HTML中拉伸图片</li>
+</ol>
+</li>
+<li><ol>
+<li>保证favicon.ico小并且可缓存</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>移动方面<ul>
+<li><ol>
+<li>保证组件小于25k</li>
+</ol>
+</li>
+<li><ol>
+<li>Pack Components into a Multipart Document</li>
+</ol>
+</li>
+</ul>
 </li>
 </ul>
 <h3 id="什么是渐进增强">什么是渐进增强</h3><p>渐进增强是指在web设计时强调可访问性、语义化HTML标签、外部样式表和脚本。保证所有人都能访问页面的基本内容和功能同时为高级浏览器和高带宽用户提供更好的用户体验。核心原则如下:</p>
