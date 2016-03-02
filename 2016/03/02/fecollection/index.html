@@ -21,7 +21,7 @@ Table of Contents  generated with DocToc">
 <meta property="og:image" content="http://yoursite.com/images/fe/element-size.png">
 <meta property="og:image" content="http://yoursite.com/images/fe/element-mask.jpg">
 <meta property="og:image" content="http://yoursite.com/images/fe/tip-box.jpg">
-<meta property="og:updated_time" content="2016-03-02T03:03:43.000Z">
+<meta property="og:updated_time" content="2016-03-02T03:14:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端问题汇总">
 <meta name="twitter:description" content="&amp;lt;!-- START doctoc generated TOC please keep comment here to allow auto update --&amp;gt;
@@ -265,7 +265,7 @@ Table of Contents  generated with DocToc">
 <li><a href="#http-method">HTTP method</a></li>
 <li><a href="#从浏览器地址栏输入url到显示页面的步骤以http为例">从浏览器地址栏输入url到显示页面的步骤(以HTTP为例)</a></li>
 <li><a href="#http-request报文结构是怎样的">HTTP request报文结构是怎样的</a></li>
-<li><a href="#http-response报文结构是怎样的">HTTP response报文结构是怎样的</a></li>
+<li><a href="#http-response报文结构是怎样的">HTTPresponse报文结构是怎样的</a></li>
 <li><a href="#如何进行网站性能优化">如何进行网站性能优化</a></li>
 <li><a href="#什么是渐进增强">什么是渐进增强</a></li>
 <li><a href="#http状态码及其含义">HTTP状态码及其含义</a></li>
@@ -509,7 +509,7 @@ Table of Contents  generated with DocToc">
 <li>根据实际请求需要可能包含一个<strong>消息实体</strong><br>一个请求报文例子如下：</li>
 </ol>
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="request">GET <span class="string">/Protocols/rfc2616/rfc2616-sec5.html</span> HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span>: <span class="string">www.w3.org</span></span><br><span class="line"><span class="attribute">Connection</span>: <span class="string">keep-alive</span></span><br><span class="line"><span class="attribute">Cache-Control</span>: <span class="string">max-age=0</span></span><br><span class="line"><span class="attribute">Accept</span>: <span class="string">text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span></span><br><span class="line"><span class="attribute">User-Agent</span>: <span class="string">Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.153 Safari/537.36</span></span><br><span class="line"><span class="attribute">Referer</span>: <span class="string">https://www.google.com.hk/</span></span><br><span class="line"><span class="attribute">Accept-Encoding</span>: <span class="string">gzip,deflate,sdch</span></span><br><span class="line"><span class="attribute">Accept-Language</span>: <span class="string">zh-CN,zh;q=0.8,en;q=0.6</span></span><br><span class="line"><span class="attribute">Cookie</span>: <span class="string">authorstyle=yes</span></span><br><span class="line"><span class="attribute">If-None-Match</span>: <span class="string">"2cc8-3e3073913b100"</span></span><br><span class="line"><span class="attribute">If-Modified-Since</span>: <span class="string">Wed, 01 Sep 2004 13:24:52 GMT</span></span><br><span class="line"></span><br><span class="line"><span class="applescript"><span class="property">name</span>=qiu&amp;age=<span class="number">25</span></span></span><br></pre></td></tr></table></figure>
-<h3 id="HTTP_response报文结构是怎样的">HTTP response报文结构是怎样的</h3><p><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html" target="_blank" rel="external">rfc2616</a>中进行了定义：</p>
+<h3 id="HTTPresponse报文结构是怎样的">HTTPresponse报文结构是怎样的</h3><p><a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html" target="_blank" rel="external">rfc2616</a>中进行了定义：</p>
 <ol>
 <li>首行是状态行包括：<strong>HTTP版本，状态码，状态描述</strong>，后面跟一个CRLF</li>
 <li>首行之后是<strong>若干行响应头</strong>，包括：<strong>通用头部，响应头部，实体头部</strong></li>
