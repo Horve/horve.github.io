@@ -21,7 +21,7 @@ Table of Contents  generated with DocToc">
 <meta property="og:image" content="http://yoursite.com/images/fe/element-size.png">
 <meta property="og:image" content="http://yoursite.com/images/fe/element-mask.jpg">
 <meta property="og:image" content="http://yoursite.com/images/fe/tip-box.jpg">
-<meta property="og:updated_time" content="2016-03-02T07:15:10.000Z">
+<meta property="og:updated_time" content="2016-03-02T07:17:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="前端问题汇总">
 <meta name="twitter:description" content="&amp;lt;!-- START doctoc generated TOC please keep comment here to allow auto update --&amp;gt;
@@ -519,15 +519,40 @@ Table of Contents  generated with DocToc">
 <figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="status">HTTP/1.1 <span class="number">200</span> OK</span></span><br><span class="line"><span class="attribute">Date</span>: <span class="string">Tue, 08 Jul 2014 05:28:43 GMT</span></span><br><span class="line"><span class="attribute">Server</span>: <span class="string">Apache/2</span></span><br><span class="line"><span class="attribute">Last-Modified</span>: <span class="string">Wed, 01 Sep 2004 13:24:52 GMT</span></span><br><span class="line"><span class="attribute">ETag</span>: <span class="string">"40d7-3e3073913b100"</span></span><br><span class="line"><span class="attribute">Accept-Ranges</span>: <span class="string">bytes</span></span><br><span class="line"><span class="attribute">Content-Length</span>: <span class="string">16599</span></span><br><span class="line"><span class="attribute">Cache-Control</span>: <span class="string">max-age=21600</span></span><br><span class="line"><span class="attribute">Expires</span>: <span class="string">Tue, 08 Jul 2014 11:28:43 GMT</span></span><br><span class="line"><span class="attribute">P3P</span>: <span class="string">policyref="http://www.w3.org/2001/05/P3P/p3p.xml"</span></span><br><span class="line"><span class="attribute">Content-Type</span>: <span class="string">text/html; charset=iso-8859-1</span></span><br><span class="line"></span><br><span class="line"><span class="json">&#123;"<span class="attribute">name</span>": <span class="value"><span class="string">"qiu"</span></span>, "<span class="attribute">age</span>": <span class="value"><span class="number">25</span></span>&#125;</span></span><br></pre></td></tr></table></figure>
 <h3 id="如何进行网站性能优化">如何进行网站性能优化</h3><p><a href="https://developer.yahoo.com/performance/rules.html" target="_blank" rel="external">雅虎Best Practices for Speeding Up Your Web Site</a>：</p>
 <ul>
-<li><p>content方面<br>  减少HTTP请求：合并文件、CSS精灵、inline Image<br>  减少DNS查询：DNS查询完成之前浏览器不能从这个主机下载任何任何文件。方法：DNS缓存、将资源分布到恰当数量的主机名，平衡并行下载和DNS查询<br>  避免重定向：多余的中间访问<br>  使Ajax可缓存<br>  非必须组件延迟加载<br>  未来所需组件预加载<br>  减少DOM元素数量<br>  将资源放到不同的域下：浏览器同时从一个域下载资源的数目有限，增加域可以提高并行下载量<br>  减少iframe数量<br>  不要404</p>
+<li><p>content方面</p>
+<ul>
+<li>减少HTTP请求：合并文件、CSS精灵、inline Image</li>
+<li>减少DNS查询：DNS查询完成之前浏览器不能从这个主机下载任何任何文件。方法：DNS缓存、将资源分布到恰当数量的主机名，平衡并行下载和DNS查询</li>
+<li>避免重定向：多余的中间访问</li>
+<li>使Ajax可缓存<br>非必须组件延迟加载<br>未来所需组件预加载<br>减少DOM元素数量<br>将资源放到不同的域下：浏览器同时从一个域下载资源的数目有限，增加域可以提高并行下载量<br>减少iframe数量<br>不要404</li>
+</ul>
 </li>
-<li><p>Server方面<br>  使用CDN<br>  添加Expires或者Cache-Control响应头<br>  对组件使用Gzip压缩<br>  配置ETag<br>  Flush Buffer Early<br>  Ajax使用GET进行请求<br>  避免空src的img标签</p>
+<li><p>Server方面</p>
+<ul>
+<li>使用CDN</li>
+<li>添加Expires或者Cache-Control响应头</li>
+<li>对组件使用Gzip压缩<br>配置ETag<br>Flush Buffer Early<br>Ajax使用GET进行请求<br>避免空src的img标签</li>
+</ul>
 </li>
-<li>Cookie方面<br>  减小cookie大小<br>  引入资源的域名不要包含cookie</li>
-<li>css方面<br>  将样式表放到页面顶部<br>  不使用CSS表达式<br>  使用<link>不使用@import<br>  不使用IE的Filter</li>
-<li>Javascript方面<br>  将脚本放到页面底部<br>  将javascript和css从外部引入<br>  压缩javascript和css<br>  删除不需要的脚本<br>  减少DOM访问<br>  合理设计事件监听器</li>
-<li>图片方面<br>  优化图片：根据实际颜色需要选择色深、压缩<br>  优化css精灵<br>  不要在HTML中拉伸图片<br>  保证favicon.ico小并且可缓存</li>
-<li>移动方面<br>  保证组件小于25k<br>  Pack Components into a Multipart Document</li>
+<li><p>Cookie方面</p>
+<ul>
+<li>减小cookie大小</li>
+<li>引入资源的域名不要包含cookie</li>
+</ul>
+</li>
+<li><p>css方面</p>
+<ul>
+<li>将样式表放到页面顶部</li>
+<li>不使用CSS表达式</li>
+<li>使用<link>不使用@import<br>不使用IE的Filter</li>
+</ul>
+</li>
+<li><p>Javascript方面<br>  将脚本放到页面底部<br>  将javascript和css从外部引入<br>  压缩javascript和css<br>  删除不需要的脚本<br>  减少DOM访问<br>  合理设计事件监听器</p>
+</li>
+<li><p>图片方面<br>  优化图片：根据实际颜色需要选择色深、压缩<br>  优化css精灵<br>  不要在HTML中拉伸图片<br>  保证favicon.ico小并且可缓存</p>
+</li>
+<li><p>移动方面<br>  保证组件小于25k<br>  Pack Components into a Multipart Document</p>
+</li>
 </ul>
 <h3 id="什么是渐进增强">什么是渐进增强</h3><p>渐进增强是指在web设计时强调可访问性、语义化HTML标签、外部样式表和脚本。保证所有人都能访问页面的基本内容和功能同时为高级浏览器和高带宽用户提供更好的用户体验。核心原则如下:</p>
 <ul>
