@@ -906,6 +906,8 @@ function addCount(Counter) {
 				counter.save(null, {
 					success: function(counter) {
 						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+						console.log("0090909090");
+						console.log(content);
 						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					},
 					error: function(counter, error) {
