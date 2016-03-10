@@ -566,7 +566,7 @@ function showTime(Counter) {
 				for (var i = 0; i < results.length; i++) {
 					var object = results[i];
 					var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
-					$(document.getElementById(url)).text(content);
+					$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 				}
 			},
 			error: function(object, error) {
@@ -592,7 +592,7 @@ function addCount(Counter) {
 				counter.save(null, {
 					success: function(counter) {
 						var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
-						$(document.getElementById(url)).text(content);
+						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					},
 					error: function(counter, error) {
 						console.log('Failed to save Visitor num, with error message: ' + error.message);
@@ -607,7 +607,7 @@ function addCount(Counter) {
 					success: function(newcounter) {
 					    console.log("newcounter.get('time')="+newcounter.get('time'));
 						var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
-						$(document.getElementById(url)).text(content);
+						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					},
 					error: function(newcounter, error) {
 						console.log('Failed to create');
