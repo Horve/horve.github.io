@@ -1896,15 +1896,18 @@ function showTime(Counter) {
 				console.log("results:" + JSON.stringify(results));
 				if (results.length == 0) {
 					//var content = '0 ' + $(document.getElementById(url)).text();
-					var content =  counter.get('time');
+					var content =  results.get('time');
 					$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					return;
 				}
 				for (var i = 0; i < results.length; i++) {
-					var object = results[i];
-					//var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
-					var content =  counter.get('time');
-					$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
+					if (i == 0) {
+						var object = results[i];
+						//var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
+						var content =  object.get('time');
+						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
+					}
+					
 				}
 			},
 			error: function(object, error) {
