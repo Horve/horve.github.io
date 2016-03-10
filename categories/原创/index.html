@@ -1,807 +1,528 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="alternative" href="/atom.xml" title="Horve的前端笔记" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>原创 - Horve的前端笔记</title><link rel="stylesheet" href="/css/main.css" type="text/css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--></head><body><header class="head"><h1 class="head-title u-fl"><a href="/">Horve的前端笔记</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a href="/archives" class="head-nav__link">文章</a></li><li class="head-nav__item"><a href="http://weibo.com/andforce" class="head-nav__link">微博</a></li><li class="head-nav__item"><a href="https://github.com/andforce" class="head-nav__link">GitHub</a></li><li class="head-nav__item"><a href="https://bintray.com/andforce" class="head-nav__link">Bintray</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time datetime="2015-11-10T09:53:31.000Z" class="post__time">November 10, 2015</time><h1 class="post__title"><a href="/2015/11/10/custom-event/">javascript自定义事件浅析</a></h1><hr/></header><div class="post__main echo"><p>在团队协作的很多情况下，某个js的函数会根据不断增加的需求进而不断增加功能，如果功能需求累积过多，我们就很难把控自己在这个函数中新定义的变量会不会覆盖掉之前的定义。如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">2</span>);<span class="comment">//新增需求1</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">3</span>);<span class="comment">//新增需求2</span></span><br><span class="line">	......<span class="comment">//一直增加就很难保证下面的代码不会与之前的代码产生冲突</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>而如果我们为新增的需求重新定义一个同名的js方法，那后来定义的方法又会将之前定义的方法覆盖，这当然也不是我们想要的结果。如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">1</span>);&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">2</span>);&#125;<span class="comment">//新增需求1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">3</span>);&#125;<span class="comment">//新增需求2</span></span><br></pre></td></tr></table></figure></p>
-<p>执行结果：<code>3</code></p>
-<p>那么有没有什么办法可以让我们的函数分别执行，并且互不影响呢？是的，你一定想到了js事件。</p>
-<a id="more"></a>
-<p>说到js的事件，我们立马就会想到原生js中对事件的实现。在标准DOM浏览器中的<code>addEventListener</code>、<code>removeEventListener</code>和在IE中的<code>attachEvent</code>、<code>detachEvent</code>这些已经为我们熟知，并且绑定在同一个DOM中的相同的事件彼此不会被覆盖，比如，你在某个div中绑定了3个<code>click</code>事件，在执行时它们会按序执行，而不会只执行最后一次绑定：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//下面的例子仅实现标准DOM浏览器</span></span><br><span class="line">oDiv.addEventListener(<span class="string">"click"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">1</span>);&#125;,<span class="literal">false</span>);</span><br><span class="line">oDiv.addEventListener(<span class="string">"click"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">2</span>);&#125;,<span class="literal">false</span>);</span><br><span class="line">oDiv.addEventListener(<span class="string">"click"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">3</span>);&#125;,<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
-<p>执行结果：1 2 3</p>
-<p>看起来刚好解决了我们的各种顾虑，单独定义，互不影响，很有利于团队协作，但是这些内置的事件绑定方式却依然无法直接解决我们的问题。</p>
-<p>好吧，既然无法直接解决，那我们就利用页面事件绑定的思想来自己探索，这就是我们今天要介绍的自定义事件。</p>
-<p><strong> 首先来看看什么是自定义事件：让函数能够具备事件的某些特性。 </strong></p>
-<p>其实自定义事件在一些主流的类库中都有实现，后续会分析具体的实现方法。今天，我们就先用简单的例子来实现自定义事件的功能。</p>
-<p>回到开始的时候我们提出的需求：让函数分别执行，并且互不影响。这就好像我们要按照清单从图书馆借5本书，走出图书馆的时候，我们手里拿到的应该是想借的5本，而不是清单上的最后一本。</p>
-<p>依照js的事件绑定方式来剖析一下这几本书和图书馆之间的关系：</p>
-<p><img src="/images/customevent/custom-event-1.png" alt="自定义事件图示"></p>
-<p>其中，图书馆就是我们要绑定事件的对象，也就是我们借书的对象，“<code>click</code>”就是我们绑定事件的类别，也就是我们想要借的书的分类，而function回调就是我们要执行的函数，也就是我们想借的具体某本书。理清了对应关系，我们就可以从一个图书馆内不同的分类书架上拿到不同的书。</p>
-<p>把这个对应的关系映射到自定义事件上就是：<strong>在某个对象上绑定不同类别的一个或多个方法，并且让它们分别执行</strong>。接下来我们就来实现一下这种关系。首先来看一下自定义事件的绑定实现：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//绑定</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">on</span>(<span class="params">obj,events,fn</span>)</span>&#123;<span class="comment">//参数分别是：对象/自定义事件类别/方法</span></span><br><span class="line">	<span class="comment">//初始化自定义监听对象，如果存在继续使用，不存在就创建新对象</span></span><br><span class="line">	obj.listeners = obj.listeners || &#123;&#125;;</span><br><span class="line">	obj.listeners[events] = obj.listeners[events] || [];<span class="comment">//初始化监听的自定义事件列表</span></span><br><span class="line">	obj.listeners[events].push(fn);<span class="comment">//将要执行的方法分别存放到对应事件的列表中</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样，我们就把想要执行的一系列方法绑定到了某个页面对象对应的自定义事件类别上。方法绑定好了之后，如何去触发呢？看下面的代码实现：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//触发</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">fire</span>(<span class="params">obj,events</span>)</span>&#123;<span class="comment">//参数分别是：对象/自定义事件类别</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &amp;lt; obj.listeners[events].length; i++)&#123;<span class="comment">//遍历某个事件类别下所有的方法</span></span><br><span class="line">        obj.listeners[events][i]();<span class="comment">//依次执行遍历到的所有的方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样，我们定义的想要去执行的每个方法都能被执行，并且它们之间互不影响。看个实际的例子：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> eventHandle = &#123;</span><br><span class="line">	on: <span class="function"><span class="keyword">function</span>(<span class="params">obj,events,fn</span>)</span>&#123;</span><br><span class="line">		obj.listeners = obj.listeners || &#123;&#125;;</span><br><span class="line">		obj.listeners[events] = obj.listeners[events] || [];</span><br><span class="line">		obj.listeners[events].push(fn);</span><br><span class="line">	&#125;,</span><br><span class="line">	fire: <span class="function"><span class="keyword">function</span>(<span class="params">obj,events</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, n = obj.listeners[events].length; i &amp;lt; n; i++)&#123;</span><br><span class="line">			<span class="built_in">console</span>.log(obj.listeners[events]);</span><br><span class="line">			obj.listeners[events][i] &amp;&amp; obj.listeners[events][i]();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	off: <span class="function"><span class="keyword">function</span>(<span class="params">obj,events</span>)</span>&#123;</span><br><span class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, n = obj.listeners[events].length; i &amp;lt; n; i++)&#123;</span><br><span class="line">			obj.listeners[events][i] = <span class="literal">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">//绑定自定义事件，</span></span><br><span class="line">eventHandle.on(oDiv,<span class="string">"eventType1"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">1</span>);&#125;);<span class="comment">//准备执行方法1</span></span><br><span class="line">eventHandle.on(oDiv,<span class="string">"eventType1"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">2</span>);&#125;);<span class="comment">//准备执行方法2</span></span><br><span class="line">eventHandle.on(oDiv,<span class="string">"eventType1"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">3</span>);&#125;);<span class="comment">//准备执行方法3</span></span><br><span class="line">eventHandle.on(oDiv,<span class="string">"eventType2"</span>,<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">4</span>);&#125;);<span class="comment">//准备执行方法4</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//触发执行</span></span><br><span class="line">eventHandle.fire(oDiv,<span class="string">"eventType1"</span>);<span class="comment">//执行eventType1下的所有方法</span></span><br></pre></td></tr></table></figure>
-<p>执行结果：1 2 3</p>
-<p>不执行方法4是因为，eventType2下的方法4仅仅被绑定，并没有被触发。</p>
-</div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/event/" class="post__tag__link">event</a></li><li class="post__tag__item"><a href="/tags/自定义事件/" class="post__tag__link">自定义事件</a></li></ul><a class="post__foot-link u-fr"></a></footer></article><article class="post"><header class="post__head"><time datetime="2015-10-26T06:59:25.000Z" class="post__time">October 26, 2015</time><h1 class="post__title"><a href="/2015/10/26/timeline/">使用Chrome DevTools的Timeline分析页面性能</a></h1><hr/></header><div class="post__main echo"><p>随着webpage可以承载的表现形式更加多样化，通过webpage来实现更多交互功能，构建web应用程序已经成为很多产品的首要选择。这种方式拥有非常明显的优势：跨平台、开发便捷、便于部署和维护等等，但随着功能的不断积累，web应用程序也会变得越来越复杂。但是，我们仍然想要在webpage支持丰富的呈现形式的同时，让页面效果能够达到&gt;=60fps(帧)/s的刷新频率以避免出现卡顿，就需要我们使用一些比较直观的方式来分析衡量页面的性能问题，为性能优化方案提供依据。</p>
-<blockquote>
-<p>为什么是60fps?<br>我们的目标是保证页面要有高于每秒60fps(帧)的刷新频率，这和目前大多数显示器的刷新率相吻合(60Hz)。如果网页动画能够做到每秒60帧，就会跟显示器同步刷新，达到最佳的视觉效果。这意味着，一秒之内进行60次重新渲染，每次重新渲染的时间不能超过16.66毫秒。</p>
-</blockquote>
-<a id="more"></a>
-<p>需求大体明确，就是要找到页面执行过程中的性能瓶颈。而Chrome DevTools的Timeline则正是用来记录和分析应用在运行时所有的活动情况，它是用来排查应用性能瓶颈的最佳工具。</p>
-<p>下图是Timeline面板的预览效果：</p>
-<p><img src="/images/timeline/timeline-preview.png" alt="Timeline预览效果图"></p>
-<blockquote>
-<p>Tips:为了避免浏览器插件对分析过程产生影响，建议在隐身模式下进行分析。</p>
-</blockquote>
-<h2 id="Timeline工具栏介绍">Timeline工具栏介绍</h2><p>Timeline工具会详细检测出在Web应用加载的过程中时间花费情况的概览，包括下载资源、处理DOM事件、页面布局渲染、向屏幕绘制元素等。你可以通过分析Timeline得到的事件、框架和实时的内存用量，找出应用的性能问题。</p>
-<p><img src="/images/timeline/timeline-1.png" alt="Timeline的两种模式"></p>
-<p>在分析页面前，需要首先开启录制功能，记录页面的操作和渲染记录。如上图，左上角的灰色圆点就是录制按钮，点击后会变成红色，然后在页面上进行相关操作后再次按下变成灰色完成录制，这样就完成了一次对操作及加载渲染的记录过程，随后Timeline就会开始分析操作过程中的各项性能参数。</p>
-<p>Timeline同时提供了两种查看模式：“事件模式(Event Mode)”和“帧模式(Frame Mode)”。如上图箭头所示。</p>
-<blockquote>
-<p>事件模式：显示重新渲染的各种事件花费的时间。<br>帧模式：显示每一帧的时间花费情况。</p>
-</blockquote>
-<h2 id="事件模式_(Event_Mode)">事件模式 (Event Mode)</h2><p>如果我们的一个页面执行效率不高，我们必须要搞清楚导致页面性能低下的原因，到底是javascript执行出了问题，还是页面渲染出了问题。要了解这里面的执行细节，我们可以使用“事件模式”来进行分析。首先我们需要录制一些需要被分析的操作，录制结束后进入事件模式预览Timeline。下图是得到的事件模式的视图：</p>
-<p><img src="/images/timeline/timeline-2.png" alt="事件模式"></p>
-<p>在上图中，不同的颜色表示不同的事件。一种颜色的区块越长，说明在处理该事件的耗时就越长。单击某一区块，可以在下面的Summary概要中看到详细的事件处理过程及耗时分布。</p>
-<p><img src="/images/timeline/timeline-3.png" alt="事件类别"></p>
-<blockquote>
-<p>蓝色(Loading)：网络通信和HTML解析<br>黄色(Scripting)：JavaScript执行<br>紫色(Rendering)：样式计算和布局，即重排<br>绿色(Painting)：重绘<br>灰色(other)：其它事件花费的时间<br>白色(Idle)：空闲时间</p>
-</blockquote>
-<p>在显示的记录中，浏览器也会为在检测过程中发现的一些可能导致性能问题的过程进行标注，在<code>Mode View</code>视图区域，可能会出现一些红色的区块段，这些红色的区块段表明，在对应的时间上执行的事件可能存在性能问题，而在对应的<code>Main Thread</code>视图区域，事件区块的右上角会出现红色的小三角，点击当前区块，在下面的<code>Summary</code>概要区域内会给出详细的警告内容以及脚本可能出现问题的行数，如下图，浏览器提示“强制同步布局可能会导致性能瓶颈”：</p>
-<p><img src="/images/timeline/timeline-4.png" alt="性能问题标注"></p>
-<p>此外，在关闭Event Mode后，还可以看到Record Detail视图，详细列出一次记录中各类事件的详细内容。</p>
-<p><img src="/images/timeline/timeline-5.png" alt="Record Detail视图"></p>
-<p><code>Record Detail</code>视图区域的左侧是事件标题，右侧是对应的时间线。点击每一条时间标题可以看到更多信息，如事件发生在脚本的哪一行等。如果你只对某一个时间段内的某些操作感兴趣，可以通过移动时间轴的始末位置来选择要浏览的区域：</p>
-<p><img src="/images/timeline/timeline-6.png" alt="选取一部分记录"></p>
-<p>在<code>Summary</code>面板及<code>Record Detail</code>视图中，事件的<code>Type</code>列表如下：</p>
-<table>
-<thead>
-<tr>
-<th>Type</th>
-<th>Info</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>send request</td>
-<td>发送请求</td>
-</tr>
-<tr>
-<td>evaluate script</td>
-<td>评估脚本</td>
-</tr>
-<tr>
-<td>parse html</td>
-<td>html解析</td>
-</tr>
-<tr>
-<td>recalculate style</td>
-<td>重新计算显示样式</td>
-</tr>
-<tr>
-<td>layout</td>
-<td>计算布局</td>
-</tr>
-<tr>
-<td>paint setup</td>
-<td>绘制设置【准备绘制】</td>
-</tr>
-<tr>
-<td>paint</td>
-<td>绘制</td>
-</tr>
-<tr>
-<td>composite layers</td>
-<td>组合层</td>
-</tr>
-<tr>
-<td>timer fired</td>
-<td>触发定时器</td>
-</tr>
-<tr>
-<td>function call</td>
-<td>函数调用</td>
-</tr>
-<tr>
-<td>receive data</td>
-<td>接收数据</td>
-</tr>
-<tr>
-<td>receive response</td>
-<td>接受响应</td>
-</tr>
-<tr>
-<td>finish loading</td>
-<td>结束加载</td>
-</tr>
-<tr>
-<td>GC event</td>
-<td>浏览器垃圾回收</td>
-</tr>
-<tr>
-<td>pevaluate script</td>
-<td>评估脚本</td>
-</tr>
-<tr>
-<td>rasterize</td>
-<td>栅格化</td>
-</tr>
-</tbody>
-</table>
-<h2 id="帧模式_(Frame_Mode)">帧模式 (Frame Mode)</h2><p>帧模式从页面渲染性能的角度提供了数据支撑，一个柱状“frame”表示渲染过程中的一帧，也就是浏览器为了渲染单个内容块而必须要做的工作，包括：执行js，处理事件，修改DOM，更改样式和布局，绘制页面等。</p>
-<p>如前文所述，我们的目标是保证页面要有高于每秒60fps(帧)的刷新频率，这样就能保证页面有高流畅度的渲染。</p>
-<p><img src="/images/timeline/timeline-7.png" alt="帧模式视图"></p>
-<p>中在Frame视图中有两条贯穿该视图的横线，分别标识出60FPS和30FPS的基准，按照前面提到的16.66ms的计算方式，我们可以理解为分别标识了16.6ms和33.3ms两个时间点。下面的一条是60FPS，低于这条线，可以达到每秒60帧；上面的一条是30FPS，低于这条线，可以达到每秒30次渲染。如果色柱都超过30FPS，这个网页就有性能问题了。</p>
-<p>图中帧柱的高度表示了该帧的总耗时，帧柱中的颜色分别对应该帧中包含的不停类型的事件。每一帧柱的高度越低越好，上图是艺龙PC首页(www.elong.com)的帧渲染图，从图中可以看出，在进行某些帧的渲染时，帧的渲染频率低于30FPS/s，第二帧和第三帧就大幅低于30fps(帧柱高度高于30fps标准线)，在实际浏览器渲染中就有可能出现卡顿。对相关的帧进行分析时，可以点击其中某一帧查看渲染详情，也可以选择某个区域的几个帧查看渲染详情。而要找出可能影响性能的原因，点击当前问题帧，在<code>Summary</code>面板及<code>Record Detail</code>视图中的详细信息中进行逐条分析。</p>
-<blockquote>
-<p>你可能注意到了在帧柱上存在灰色区域和空白区域,它们分别代表：<br>灰色区块：那些没有被DevTools感知到的活动<br>空白区块：显示刷新周期（display refresh cycles）中的空闲时间段</p>
-</blockquote>
-<p>点击某一个帧柱还可以得到该帧的详细记录数据：</p>
-<p><img src="/images/timeline/timeline-8.png" alt="帧详情"></p>
-<blockquote>
-<p>Warning: 警告信息<br>ScreenShot: 当前选中帧的渲染截屏<br>Duration: 该记录及其子记录的总耗时<br>FPS: 当前帧的渲染频率<br>CPU Time: CPU耗时<br>Aggregated Time: 合计耗时分布</p>
-</blockquote>
-<h2 id="总结">总结</h2><p>发现问题是解决问题的第一步，chrome浏览器的TimeLine工具可以很好地辅助我们分析页面的性能瓶颈，提供详细全面的分析数据，为我们进行性能优化提供数据依据。当然，TimeLine中有用的功能还有很多，比如<code>Memery Mode</code>, <code>Screen Shot</code>等，使用技巧多种多样，在这里主要介绍了如何去记录一段渲染过程，如何去使用<code>Event Mode</code>和<code>Frame Mode</code>去查看并分析得到性能指标，后续如果有新的体会和发现，还会再做记录~</p>
-<h2 id="TimeLine中的事件汇总">TimeLine中的事件汇总</h2><h3 id="Loading事件">Loading事件</h3><table>
-<thead>
-<tr>
-<th>事件</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Parse HTML</td>
-<td>浏览器执行HTML解析</td>
-</tr>
-<tr>
-<td>Finish Loading</td>
-<td>网络请求完毕事件</td>
-</tr>
-<tr>
-<td>Receive Data</td>
-<td>请求的响应数据到达事件，如果响应数据很大（拆包），可能会多次触发该事件</td>
-</tr>
-<tr>
-<td>Receive Response</td>
-<td>响应头报文到达时触发</td>
-</tr>
-<tr>
-<td>Send Request</td>
-<td>发送网络请求时触发</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Scripting事件">Scripting事件</h3><table>
-<thead>
-<tr>
-<th>事件</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Animation Frame Fired</td>
-<td>一个定义好的动画帧发生并开始回调处理时触发</td>
-</tr>
-<tr>
-<td>Cancel Animation Frame</td>
-<td>取消一个动画帧时触发</td>
-</tr>
-<tr>
-<td>GC Event</td>
-<td>垃圾回收时触发</td>
-</tr>
-<tr>
-<td>DOMContentLoaded</td>
-<td>当页面中的DOM内容加载并解析完毕时触发</td>
-</tr>
-<tr>
-<td>Evaluate Script</td>
-<td>A script was evaluated.</td>
-</tr>
-<tr>
-<td>Event</td>
-<td>js事件</td>
-</tr>
-<tr>
-<td>Function Call</td>
-<td>只有当浏览器进入到js引擎中时触发</td>
-</tr>
-<tr>
-<td>Install Timer</td>
-<td>创建计时器（调用setTimeout()和setInterval()）时触发</td>
-</tr>
-<tr>
-<td>Request Animation Frame</td>
-<td>A requestAnimationFrame() call scheduled a new frame</td>
-</tr>
-<tr>
-<td>Remove Timer</td>
-<td>当清除一个计时器时触发</td>
-</tr>
-<tr>
-<td>Time</td>
-<td>调用console.time()触发</td>
-</tr>
-<tr>
-<td>Time End</td>
-<td>调用console.timeEnd()触发</td>
-</tr>
-<tr>
-<td>Timer Fired</td>
-<td>定时器激活回调后触发</td>
-</tr>
-<tr>
-<td>XHR Ready State Change</td>
-<td>当一个异步请求为就绪状态后触发</td>
-</tr>
-<tr>
-<td>XHR Load</td>
-<td>当一个异步请求完成加载后触发</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Rendering事件">Rendering事件</h3><table>
-<thead>
-<tr>
-<th>事件</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Invalidate layout</td>
-<td>当DOM更改导致页面布局失效时触发</td>
-</tr>
-<tr>
-<td>Layout</td>
-<td>页面布局计算执行时触发</td>
-</tr>
-<tr>
-<td>Recalculate style</td>
-<td>Chrome重新计算元素样式时触发</td>
-</tr>
-<tr>
-<td>Scroll</td>
-<td>内嵌的视窗滚动时触发</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Painting事件">Painting事件</h3><table>
-<thead>
-<tr>
-<th>事件</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Composite Layers</td>
-<td>Chrome的渲染引擎完成图片层合并时触发</td>
-</tr>
-<tr>
-<td>Image Decode</td>
-<td>一个图片资源完成解码后触发</td>
-</tr>
-<tr>
-<td>Image Resize</td>
-<td>一个图片被修改尺寸后触发</td>
-</tr>
-<tr>
-<td>Paint</td>
-<td>合并后的层被绘制到对应显示区域后触发</td>
-</tr>
-</tbody>
-</table>
-<h2 id="参考文档">参考文档</h2><p><a href="https://developers.google.com/chrome-developer-tools/docs/timeline" target="_blank" rel="external">https://developers.google.com/chrome-developer-tools/docs/timeline</a></p>
-<p><a href="http://www.w3cfuns.com/article-1248-1.html" target="_blank" rel="external">http://www.w3cfuns.com/article-1248-1.html</a></p>
-<p><a href="http://www.oschina.net/translate/performance-optimisation-with-timeline-profiles" target="_blank" rel="external">http://www.oschina.net/translate/performance-optimisation-with-timeline-profiles</a></p>
-</div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/timeline/" class="post__tag__link">timeline</a></li><li class="post__tag__item"><a href="/tags/前端性能/" class="post__tag__link">前端性能</a></li></ul><a class="post__foot-link u-fr"></a></footer></article><article class="post"><header class="post__head"><time datetime="2015-10-17T08:01:54.000Z" class="post__time">October 17, 2015</time><h1 class="post__title"><a href="/2015/10/17/domcontentloaded/">Javascript中的domReady引入机制</a></h1><hr/></header><div class="post__main echo"><h2 id="一、扯淡部分">一、扯淡部分</h2><p>回想当年，在摆脱写页面时js全靠从各种DEMO中copy出来然后东拼西凑的幽暗岁月之后，毅然决然地打算放弃这种处处“拿来主义”的不正之风，然后开启通往高大上的“前端攻城狮”的飞升之旅。想想都有些小激动呢~然而人生不如意者十之八九，刚踏上征程就经常会被各种Error虐到体无完肤，有时候甚至会被在现在看来很低级的bug折磨得生不如死。但没有一种成长是不需要付出代价的，也就是那段刚跳入泥潭的日子开启了让自己成为一名真正的JSer的大门，也使自己在奔向高大上的路上让“见招拆招、兵来将挡”成为常态，以至于后来都慢慢觉得，做一个东西不遇上几个bug心里就没有稳妥扎实的安全感。再后来也就学着不断去安慰自己：踩到脚底下的bug越多，离翻过那座墙也就不远了~</p>
-<a id="more"></a>
-<p>回望一路走来的林林种种，有一个bug大概是每个JSer在初入大门时都遇到过的。那就是用js获取页面元素的时候经常会报出一个<code>TypeError:Cannot read property ‘XXX’of null.</code>大意就是根本就没找到你要找的元素，更别说你要对它进行操作了。明明页面上有这个元素，但在js里偏偏获取不到，这让很多刚接触js不久的童鞋都伤透了脑筋，于是疯狂百度谷歌，最后才发现造成这个低级bug的始作俑者竟然是<code>window.onload</code>，也就是文档未就绪，DOM树还没有建完就开始对节点进行操作从而导致的错误。</p>
-<p>扯了那么多，终于扯到跟本文主题相干的东西了：<code>domReady</code>，也就是所谓的“文档就绪”。我们对DOM节点的任何操作在DOM树创建之后就可以进行。在理解这个概念之前，我们先来看看浏览器在载入一个文档时是怎么对HTML进行解析的。</p>
-<h2 id="二、浏览器渲染引擎的HTML解析流程">二、浏览器渲染引擎的HTML解析流程</h2><p>何谓“渲染”，其实就是浏览器把请求到的HTML内容显示出来的过程。渲染引擎首先通过网络获得所请求文档的内容，通常以8K分块的方式完成。下面是渲染引擎在取得内容之后的基本流程：</p>
-<blockquote>
-<p>1，解析html以构建dom树（构建DOM节点）：渲染引擎开始解析html，并将标签转化为内容树中的dom节点。</p>
-<p>2，构建render树（解析样式信息）：解析外部CSS文件及style标签中的样式信息。Render树由一些包含有各种属性的矩形组成，它们将被按照正确的顺序显示到屏幕上。</p>
-<p>3，布局render树（布局DOM节点）：执行布局过程，它将确定每个节点在屏幕上的确切坐标。</p>
-<p>4，绘制render树（绘制DOM节点）：Render树构建好了之后，将会再下一步就是绘制，即遍历render树，并使用UI后端层绘制每个节点。</p>
-</blockquote>
-<p>以上就是HTML渲染的基本流程（详情请移步至“<a href="http://kb.cnblogs.com/page/129756/" target="_blank" rel="external">浏览器内部工作原理</a>”），但这并不包含解析过程中浏览器加载外部资源如图片、脚本、iframe等的过程。说白了，上面的四步仅仅是HTML结构的渲染流程，而外部资源的加载在HTML结构的渲染流程中贯穿始终，即便绘制DOM节点已经完成，外部资源依然可能正在加载中或尚未加载。</p>
-<h2 id="三、window-onload">三、window.onload</h2><p>了解了浏览器渲染引擎的HTML解析流程，我们就回到domReady。前文提到了，那个蛋疼的TypeError是由于在DOM树构建完成之前对节点进行了操作，而通常的解决的办法就是让js在window.onload的回调里执行，也就是说，在文档所有的解析渲染、资源加载完成之前，不让js脚本执行，这样一来就妥妥地避免了因js操作先于DOM树创建而带来的bug：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Window.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="comment">//doSomething</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样的解决办法应该是初学原生js时很多人最常用的解决办法，看起来也的确没什么问题。如果文档外部资源不多的时候也没什么问题，但，我们来做一个假设。假设一个页面上有100张远程图片，我需要让js做到在点击每张图片时alert出图片的src属性，又该怎么做？</p>
-<p>是不是已经发现点小问题了？按照第二部分内容对浏览器解析渲染HTML流程的介绍，DOM树很快就构建完毕了，而100张图片还在缓慢地加载。而要想执行alert出图片src属性的js，则需要等到100张图片全部加载完成后才能执行。而在这期间，页面元素不会响应你的任何操作，就好像“死”了一样。如果是在实际项目中，用户很可能不会等到你页面所有东东加载完以后才去操作，在面对一个不会对自己的操作做任何响应的页面，唯一比较解气的方式就是——果断关掉~然后……就没有了然后。</p>
-<p>所以在实际应用中，我们经常会遇到这样的场景，让页面加载后去做一些事情：绑定事件、DOM操作某些结点等。使用<code>window.onload</code>对于很多实际的应用而言有点太“迟”了，比较影响用户体验。那有没有更好的方法解决这个问题？比如提前到只要DOM树创建完成之后就可以进行如上操作呢？答案当然是有的：<code>DOMContentLoaded</code>事件。</p>
-<h2 id="四、DOMContentLoaded">四、DOMContentLoaded</h2><p>说这个之前必须要提一下jQuery中的<code>domReady</code>机制。很多时候在使用jq也会出现最前面出现的那个<code>TypeError</code>，解决办法就是把js放到jQuery的ready回调里：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;);</span><br></pre></td></tr></table></figure>
-<p>或者：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;);</span><br></pre></td></tr></table></figure>
-<p>这样一来，错误妥妥地没了。然后对比因果关系，大概得出一个结论：jQuery的ready回调应该跟<code>window.onload</code>的效果原理是一样的。恩，应该是这样。那我们就先来看一看jQuery（1.11.1）的<code>ready</code>回调是如何实现的：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">jQuery.fn.ready = <span class="function"><span class="keyword">function</span>(<span class="params"> fn </span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Add the callback</span></span><br><span class="line">    jQuery.ready.promise().done( fn );</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br><span class="line">jQuery.ready.promise = <span class="function"><span class="keyword">function</span>(<span class="params"> obj </span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ( !readyList ) &#123;</span><br><span class="line">        readyList = jQuery.Deferred();</span><br><span class="line">        <span class="keyword">if</span> ( <span class="built_in">document</span>.readyState === <span class="string">"complete"</span> ) &#123;</span><br><span class="line">            setTimeout( jQuery.ready );</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="built_in">document</span>.addEventListener ) &#123;</span><br><span class="line">            <span class="built_in">document</span>.addEventListener( <span class="string">"DOMContentLoaded"</span>, completed, <span class="literal">false</span> );</span><br><span class="line">            <span class="built_in">window</span>.addEventListener( <span class="string">"load"</span>, completed, <span class="literal">false</span> );</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">document</span>.attachEvent( <span class="string">"onreadystatechange"</span>, completed );</span><br><span class="line">            <span class="built_in">window</span>.attachEvent( <span class="string">"onload"</span>, completed );</span><br><span class="line">            <span class="keyword">var</span> top = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                top = <span class="built_in">window</span>.frameElement == <span class="literal">null</span> &amp;&amp; <span class="built_in">document</span>.documentElement;</span><br><span class="line">            &#125; <span class="keyword">catch</span>(e) &#123;&#125;</span><br><span class="line">            <span class="keyword">if</span> ( top &amp;&amp; top.doScroll ) &#123;</span><br><span class="line">                (<span class="function"><span class="keyword">function</span> <span class="title">doScrollCheck</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> ( !jQuery.isReady ) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            <span class="comment">// Use the trick by Diego Perini</span></span><br><span class="line">                            top.doScroll(<span class="string">"left"</span>);</span><br><span class="line">                        &#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">                            <span class="keyword">return</span> setTimeout( doScrollCheck, <span class="number">50</span> );</span><br><span class="line">                        &#125;</span><br><span class="line">                        detach();</span><br><span class="line">                        jQuery.ready();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> readyList.promise( obj );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>看起来比想象中的<code>window.onload</code>要复杂呵。Jq的源码中出现了<code>DOMContentLoaded</code>、<code>readyState</code>、<code>onreadystatechange</code>，这些跟<code>domReady</code>有什么关系？</p>
-<p>我们还是先从<code>DOMContentLoaded</code>说起吧。就如前面所述，很多时候我们会把js逻辑写在<code>window.onload</code>回调中，以防DOM树还没有建完就开始对节点进行操作从而导致错误，而对于很多实际应用来说，越早介入对DOM的干涉就越好，比如进行特征侦测、事件绑定、DOM操作神马的。domReady还可以满足用户提前绑定事件的需求，因为有些情况下页面的图片等外部资源过多，<code>window.onload</code>迟迟不能触发，这时若还没有绑定事件，用户点任何的按钮都没反应（链接除外）会直接影响体验。</p>
-<p>为了解决<code>window.onload</code>的短板，FF中便增加了一个<code>DOMContentLoaded</code>方法，与<code>onload</code>相比，<code>DOMContentLoaded</code>方法触发的时间更早，它是在页面的DOM树创建完成后（也就是HTML解析第一步完成）即触发，而无需等待其他资源的加载。Webkit引擎从版本525（Webkit nightly 1/2008:525+）开始也引入了该事件，Opera中也包含该方法。到目前为止NB的IE仍然没有要添加的意思。虽然IE下没有，但解决办法总是有的。于是对于那些忙前忙后的兼容小达人和死不悔改的顽固派，也就有了两套策略：</p>
-<ul>
-<li><p>1）支持DOMContentLoaded事件的，就使用DOMContentLoaded事件；</p>
-</li>
-<li><p>2）不支持的，就用来自Diego Perini发现的著名Hack兼容。兼容原理大概就是，通过IE中的<code>document.documentElement.doScroll(‘left’)</code>来判断DOM树是否创建完毕。</p>
-</li>
-</ul>
-<p>Blabla了这么多，来看个IE模拟<code>DOMContentLoaded</code>例子吧。这个例子就来自上面发现IE下<code>doScroll Hackd</code>的作者，细看也就是简化版的<code>jQuery.ready</code>回调的IE处理逻辑。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">IEContentLoaded</span> (<span class="params">w, fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> d = w.document, done = <span class="literal">false</span>,</span><br><span class="line">    <span class="comment">// 只执行一次用户的回调函数init()</span></span><br><span class="line">    init = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!done) &#123;</span><br><span class="line">            done = <span class="literal">true</span>;</span><br><span class="line">            fn();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// DOM树未创建完之前调用doScroll会抛出错误</span></span><br><span class="line">            d.documentElement.doScroll(<span class="string">'left'</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">            <span class="comment">//延迟再试一次~</span></span><br><span class="line">            setTimeout(<span class="built_in">arguments</span>.callee, <span class="number">50</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 没有错误就表示DOM树创建完毕，然后立马执行用户回调</span></span><br><span class="line">        init();</span><br><span class="line">    &#125;)();</span><br><span class="line">    <span class="comment">//监听document的加载状态</span></span><br><span class="line">    d.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 如果用户是在domReady之后绑定的函数，就立马执行</span></span><br><span class="line">        <span class="keyword">if</span> (d.readyState == <span class="string">'complete'</span>) &#123;</span><br><span class="line">            d.onreadystatechange = <span class="literal">null</span>;</span><br><span class="line">            init();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>而对于高大上的chrome、ff等高级浏览器来说，对<code>DOMContentLoaded</code>事件的处理就相对来说小case了，按照标准的事件绑定方式就可以处理：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( <span class="built_in">document</span>.addEventListener ) &#123;</span><br><span class="line">    <span class="built_in">document</span>.addEventListener( <span class="string">"DOMContentLoaded"</span>, completed, <span class="literal">false</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="五、实例">五、实例</h2><p>看到这，想必大家已经对<code>DOMContentLoaded</code>已经有了新的认识，<code>onload</code>保险丝也该适时换成智能电门啦~接下来就来个鲜活的例子，来让大家更清晰的做下对比。</p>
-<p>首先，页面上有一组图片：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/01.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/02.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/03.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/04.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/05.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>页面的js处理逻辑：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">var</span> d = <span class="built_in">document</span>;</span><br><span class="line">    <span class="keyword">var</span> msgBox = d.getElementById(<span class="string">"showMsg"</span>);</span><br><span class="line">    <span class="keyword">var</span> imgs = d.getElementsByTagName(<span class="string">"img"</span>);</span><br><span class="line">    <span class="keyword">var</span> time1 = <span class="literal">null</span>,time2 = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span>(d.addEventListener)&#123;</span><br><span class="line">        d.addEventListener(<span class="string">"DOMContentLoaded"</span>,domReady,<span class="literal">false</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        IEContentLoaded(domReady);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">domReady</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        msgBox.innerHTML += <span class="string">"dom已加载！&lt;br&gt;"</span>;</span><br><span class="line">        time1 = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">        msgBox.innerHTML += <span class="string">"时间戳："</span> + time1 + <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">//兼容IE的domReady</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">IEContentLoaded</span>(<span class="params">fn</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> done = <span class="literal">false</span>,</span><br><span class="line">        init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!done)&#123;</span><br><span class="line">                done = <span class="literal">true</span>;</span><br><span class="line">                fn();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                d.documentElement.doScroll(<span class="string">'left'</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">                setTimeout(<span class="built_in">arguments</span>.callee,<span class="number">50</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            init();</span><br><span class="line">        &#125;)(); </span><br><span class="line">        d.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            msgBox.innerHTML += <span class="string">"加载状态："</span> + d.readyState + <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">            <span class="keyword">if</span>(d.readyState == <span class="string">'complete'</span>)&#123;</span><br><span class="line">                d.onreadystatechange = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        msgBox.innerHTML += <span class="string">"onload已加载！&lt;br&gt;"</span>;</span><br><span class="line">        time2 = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">        msgBox.innerHTML += <span class="string">"时间戳："</span> + time2 + <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">        msgBox.innerHTML +=<span class="string">"domReady比onload快："</span> + (time2 - time1) + <span class="string">"ms&lt;br&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
-<p>相信js脚本不用做过多解释，在前面都已做过详细分析，我们直接来看运行结果：</p>
-<p><img src="/images/1510171431.png" alt="运行结果"></p>
-<p>很容易就能看出，<code>DOMContentLoaded</code>执行5238ms之后才执行的<code>onload</code>。这只是一个DEMO的差距，而如果是更大型的应用，可能这个时间差距会更大。</p>
-<h2 id="最后">最后</h2><p>这就是本文所分享的domReady引入的机制，有兴趣的可以继续移步如下链接。希望本文能为你提供到帮助，也希望与读者多多交流。如文中内容有误，请评论告知~谢谢。</p>
-<p>浏览器内部工作原理：</p>
-<p><a href="http://kb.cnblogs.com/page/129756/" target="_blank" rel="external">http://kb.cnblogs.com/page/129756/</a></p>
-<p>司徒正美《javascript的事件加载》：</p>
-<p><a href="http://www.cnblogs.com/rubylouvre/archive/2009/08/26/1554204.html" target="_blank" rel="external">http://www.cnblogs.com/rubylouvre/archive/2009/08/26/1554204.html</a></p>
-</div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/domContentLoaded/" class="post__tag__link">domContentLoaded</a></li><li class="post__tag__item"><a href="/tags/domready/" class="post__tag__link">domready</a></li><li class="post__tag__item"><a href="/tags/javascript/" class="post__tag__link">javascript</a></li></ul><a class="post__foot-link u-fr"></a></footer></article><article class="post"><header class="post__head"><time datetime="2015-10-16T16:06:12.000Z" class="post__time">October 17, 2015</time><h1 class="post__title"><a href="/2015/10/17/chrome-extension/">chrome拓展开发实战：页面脚本的拦截注入</a></h1><hr/></header><div class="post__main echo"><p>目前公司产品的无线站点已经实现了业务平台组件化，所有业务组件的转场都是通过路由来完成，而各个模块是通过requirejs进行统一管理，在灰度测试时会通过grunt进行打包操作，虽然工程化的开发流程已经大大提升了效率，但是为了满足不同平台在任意业务入口页面一键注入业务脚本即可进行测试的实际需求，团队尝试通过chrome拓展来进行实现。由于我本人是第一次开发chrome拓展插件，所以开发的过程中遇到不少坑，某些功能的实现方式也未必是最好，但还是有很多难得的收获。接下来就围绕“拦截与注入”的功能点，详细介绍一下开发过程。<br><a id="more"></a></p>
-<p>首先来看一看开发完成后的组件界面：</p>
-<p><img src="/images/chrome/chrome-1.jpg" alt="1"></p>
-<h2 id="拓展的主要功能点：">拓展的主要功能点：</h2><blockquote>
-<p>1，页面脚本的嗅探<br>2，指定脚本的下载<br>3，指定域名下脚本的自动拦截（加载时不执行）<br>4，普通方式直接向页面中注入脚本<br>5，通过requirejs向页面注入脚本<br>6，拦截指定域名下资源后弹出通知窗口</p>
-</blockquote>
-<p>在正式开始开发上述功能点之前，还是有必要先对chrome拓展的相关概念进行介绍。</p>
-<h2 id="关于chrome拓展">关于chrome拓展</h2><p>chrome拓展可以大大的扩展你的浏览器的功能。包括但不仅限于这些功能：捕捉特定网页的内容，捕捉HTTP报文，捕捉用户浏览动作，改变浏览器地址栏/起始页/书签/Tab等界面元素的行为，与别的站点通信，修改网页内容……不过，浏览器插件也有一定的弊端，那就是会带来一些安全隐患，也可能让你的浏览器变得缓慢甚至不稳定。</p>
-<p>开始开发chrome拓展的时候，你几乎不需要准备任何东西，只需要一个编辑器，然后准备好API文档随时查阅即可。关于如何开始一个chrome拓展，官方有一篇文章介绍，文章不是特别长，但足够你了解一个chrome拓展是如何产生的。官方的DEMO中一共有4个文件：</p>
-<ul>
-<li><code>manifest.json</code> - 所有插件都要有这个文件，这是插件的配置文件，可看作插件的“入口”。</li>
-<li><code>icon.png</code> - 拓展的小图标，推荐使用19*19的半透明png图片，也就是上图中拓展的入口小图标。</li>
-<li><code>popup.html</code> - 就是你看到的打开拓展后的界面。</li>
-<li><code>popup.js</code> - 拓展界面引用的js文件。</li>
-</ul>
-<p><code>manifest.json</code>作为配置文件，在拓展中是核心文件，内容也非常显而易见：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"manifest_version"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="string">"name"</span>: <span class="string">"One-click Kittens"</span>,</span><br><span class="line">  <span class="string">"description"</span>: <span class="string">"This extension demonstrates a browser action with kittens."</span>,</span><br><span class="line">  <span class="string">"version"</span>: <span class="string">"1.0"</span>,</span><br><span class="line">  <span class="string">"permissions"</span>: [</span><br><span class="line">    <span class="string">"https://secure.flickr.com/"</span></span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"browser_action"</span>: &#123;</span><br><span class="line">    <span class="string">"default_icon"</span>: <span class="string">"icon.png"</span>,</span><br><span class="line">    <span class="string">"default_popup"</span>: <span class="string">"popup.html"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>manifest_version</code>：现在应该总是2。</p>
-<p><code>permissions</code>：很重要的东西，即允许插件做哪些事情，访问哪些站点，假如一个插件的”permissions”里写有<code>http://*.hacker.com</code>，那么这个插件就被允许访hacker.com上的所有内容，包括可能会把你的一些个人信息提交给hacker.com，危险性不言而喻，查看一个插件能访问那些站点的方法是：在chrome的地址栏里输入<code>chrome://extensions/</code>，然后点对应插件的旁边的那个“权限”。</p>
-<p><code>default_popup</code>：用来指定点击小图标后弹出的小窗口中默认显示的是哪个html，这个弹出的小窗口就叫做“popup”。</p>
-<p><code>browser_action</code>：这是一个浏览器级的动作，也就是说，不管你现在在访问哪个页面，那个小按钮总是显示出来，而我们的插件如果仅仅是针对某些页面的话，就不适合用这个”browser_action”了，而要用”page_action”，如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">     <span class="string">"manifest_version"</span>: <span class="number">2</span>,</span><br><span class="line">     <span class="string">"name"</span>: <span class="string">"ihorve.com viewer"</span>,</span><br><span class="line">     <span class="string">"version"</span>: <span class="string">"0.0.1"</span>,</span><br><span class="line">     <span class="string">"background"</span>: &#123; <span class="string">"scripts"</span>: [<span class="string">"background.js"</span>] &#125;,</span><br><span class="line">     <span class="string">"permissions"</span>: [<span class="string">"tabs"</span>],</span><br><span class="line">     <span class="string">"page_action"</span>: &#123;</span><br><span class="line">          <span class="string">"default_icon"</span>: &#123;</span><br><span class="line">               <span class="string">"19"</span>: <span class="string">"ihorve_19.png"</span>,</span><br><span class="line">               <span class="string">"38"</span>: <span class="string">"ihorve_38.png"</span></span><br><span class="line">          &#125;,</span><br><span class="line">          <span class="string">"default_title"</span>: <span class="string">"ihorve.com article information"</span>,</span><br><span class="line">          <span class="string">"default_popup"</span>: <span class="string">"popup.html"</span></span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>Page Actions</code>与<code>Browser Actions</code>非常类似，除了Page Actions没有badge外，其他Browser Actions所有的方法Page Actions都有。另外的区别就是，Page Actions并不像Browser Actions那样一直显示图标，而是可以在特定标签特定情况下显示或隐藏，所以它还具有独有的show和hide方法。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chrome.pageAction.show(integer tabId);</span><br><span class="line">chrome.pageAction.hide(integer tabId);</span><br></pre></td></tr></table></figure>
-<p><code>tabId</code>为标签id，可以通过tabs接口获取，有关tab相关的内容将在后面进行讲解。</p>
-<p>在<code>page_action</code>中，“<code>permissions</code>”属性里的“<code>tabs</code>”是必须的，否则下面的js不能获取到tab里的url，而这个url是我们判断是否要把小图标show出来的依据。这样，拓展小图标只会在指定url被打开时出现在地址栏里。</p>
-<p>关于拓展的组成文件，可以参考360翻译成中文的<a href="http://open.chrome.360.cn/extension_dev/overview.html" target="_blank" rel="external">官方文档</a>，很好理解，这里不再赘述，有些不好理解的就是拓展中消息的传递，也就是如何通过拓展界面与页面进行通信，在涉及到的地方我会进行详细说明。接下来我们就围绕相关的功能点介绍对应的API及实现过程。我的拓展包中的主要文件如下：</p>
-<ul>
-<li>manifest.json - 同上</li>
-<li>icon.png - 拓展的小图标</li>
-<li>popup.html - 拓展界面html</li>
-<li>popup.js - 拓展界面引用的js文件</li>
-<li>returnjs.js - 拦截页面脚本时，阻止页面脚本执行的注入脚本</li>
-<li>sendlink.js - 嗅探页面脚本时的注入脚本</li>
-<li>background.js - chrome拓展的主程序</li>
-</ul>
-<p>在这里先介绍一下<code>background.js</code>。<code>background</code>是什么概念？这是一个很重要的东西，可以把它认为是chrome插件的主程序，理解这个很关键，一旦插件被启用（有些插件对所有页面都启用，有些则只对某些页面启用），chrome就给插件开辟了一个独立的javascript运行环境（又称作运行上下文），用来跑你指定的background script，在这个例子中，也就是background.js。在background.js中，可以指定插件要立即执行的任务，以及配置在哪些域名中要立即执行这些任务。</p>
-<p><code>background.js</code>通过<code>manifest.json</code>文件中的<code>background</code>配置项进行指定：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"background"</span>: &#123;</span><br><span class="line">    <span class="string">"scripts"</span>: [<span class="string">"background.js"</span>]</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<h2 id="页面脚本的嗅探">页面脚本的嗅探</h2><p>嗅探页面脚本的流程大概是：</p>
-<ul>
-<li>1，获取当前打开的标签</li>
-<li>2，向当前标签注入脚本sendlink.js（在当前标签的页面中执行，收集页面外链脚本并向拓展发送获取到的脚本列表）</li>
-<li>3，拓展中监听当前页面发送的脚本列表并展现</li>
-</ul>
-<p>上述流程都在popup.js文件中实现。首先来看如何获取当前打开的标签，以及如何向当前标签注入一个<code>sendlink.js</code>文件。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">chrome.windows.getCurrent(<span class="function"><span class="keyword">function</span>(<span class="params"> currentWindow </span>) </span>&#123;</span><br><span class="line">  <span class="comment">//获取有指定属性的标签，为空获取全部标签</span></span><br><span class="line">  chrome.tabs.query( &#123;</span><br><span class="line">    active: <span class="literal">true</span>, windowId: currentWindow.id</span><br><span class="line">  &#125;, <span class="function"><span class="keyword">function</span>(<span class="params">activeTabs</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"TabId:"</span> + activeTabs[<span class="number">0</span>].id);</span><br><span class="line">    <span class="comment">//执行注入，第一个参数表示向哪个标签注入</span></span><br><span class="line">    <span class="comment">//第二个参数是一个option对象，file表示要注入的文件，也可以是code</span></span><br><span class="line">    <span class="comment">//是code时，对应的值为要执行的js脚本内容，如：code: "alert(1);"</span></span><br><span class="line">    <span class="comment">//allFrames表示如果页面中有iframe，是否也向iframe中注入脚本</span></span><br><span class="line">    chrome.tabs.executeScript(activeTabs[<span class="number">0</span>].id, &#123;</span><br><span class="line">      file: <span class="string">"sendlink.js"</span>,</span><br><span class="line">      allFrames: <span class="literal">false</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>获取当前打开标签和向标签中注入脚本文件的操作都已经完成，现在我们来看一看sendlink.js文件中的具体内容：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> links = <span class="built_in">document</span>.getElementsByTagName(<span class="string">"script"</span>),</span><br><span class="line">    arr = [];</span><br><span class="line">[].forEach.call(links, <span class="function"><span class="keyword">function</span>(<span class="params">el</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> href = el.src;</span><br><span class="line">    <span class="keyword">if</span>(<span class="regexp">/[http|https]:\/\//gi</span>.test(href))&#123;</span><br><span class="line">    arr.push(href);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line">arr.sort();</span><br><span class="line"><span class="comment">//向拓展发送消息，这里就涉及到了消息通讯</span></span><br><span class="line">chrome.extension.sendMessage(arr);</span><br></pre></td></tr></table></figure>
-<p>上述代码中出现了消息通讯，如果你仅仅需要给你自己的扩展的另外一部分发送一个消息（可选的是否得到答复），你可以简单地使用<code>chrome.extension.sendMessage()</code>方法。这个方法可以帮助你从当前的标签页面到扩展传送一次JSON序列化消息。</p>
-<p>而在拓展中，可以使用<code>chrome.extension.onMessage()</code>方法进行监听，并且在回调中处理监听到的消息内容。详情请查阅360翻译的中文文档。文档中的<code>chrome.extension.sendRequest()</code>和<code>chrome.extension.sendRequest()</code>已经被更新的<code>onMessage</code>和<code>sendMessage</code>代替。下面就来看一看在<code>popup.js</code>中如何监听消息。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chrome.extension.onMessage.addListener(<span class="function"><span class="keyword">function</span>(<span class="params">links</span>) </span>&#123;</span><br><span class="line">  <span class="comment">//处理接收到的links，展现在拓展页面中的DOM里</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>这样就完成了一次从拓展向当前标签页注入脚本，在注入的脚本中收集script外链脚本，并且将脚本列表通过消息发送给拓展，然后在拓展中接收并处理消息的过程。</p>
-<h2 id="指定脚本的下载">指定脚本的下载</h2><p>下载功能就相对简单，使用chrome拓展的downloads API即可。因为下载功能是在拓展中实现的，所以js脚本应该写在popup.js文件中。此外，下载功能需要在<code>manifest.json</code>文件中配置<code>permissions</code>，增加<code>downloads</code>权限：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"permissions"</span>: [<span class="string">"downloads"</span>],</span><br><span class="line">执行下载链接的逻辑。应该在按钮的点击事件后执行。</span><br><span class="line"></span><br><span class="line"><span class="comment">//下载所选链接</span></span><br><span class="line">downloadLinks: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>, n = MainLogic.visibleLinks.length; i &lt; n; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (MainLogic.$id(<span class="string">"cb"</span> + i).checked)&#123;</span><br><span class="line">      <span class="comment">//chrome拓展的下载API</span></span><br><span class="line">      chrome.downloads.download(&#123;url: MainLogic.visibleLinks[i]&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">window</span>.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="指定域名下脚本的自动拦截">指定域名下脚本的自动拦截</h2><p>资源拦截的功能需要为<code>manfest.json</code>中的<code>permissions</code>字段配置<code>webRequest</code>和<code>webRequestBlocking</code>权限。而进行资源拦截的原理也很容易从这两个词的意思上看出来：在web发送请求的时候执行操作。其实webRequest的核心意思就是要伪造各种request，那么就不单单是写某个对象的数据这么简单，还需要选择合适的时机，在发送某种request之前伪造好它，或者在真实的request到来之后半路截获它，替换成假的然后再发出去。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"permissions"</span>: [</span><br><span class="line">    <span class="string">"webRequest"</span>, </span><br><span class="line">    <span class="string">"webRequestBlocking"</span></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-<p>Chrome提供了较为完整的方法供扩展程序分析、阻断及更改网络请求，同时也提供了一系列较为全面的监听事件以监听整个网络请求生命周期的各个阶段。网络请求的整个生命周期所触发事件的时间顺序如下图所示。</p>
-<p><img src="/images/chrome/chrome-2.jpg" alt="2"></p>
-<p>因为我们需要在指定的域名的资源开始发送请求的时候就进行拦截，所以不能等到拓展打开的时候才去执行拦截操作，必须在页面一打开就进行拦截的部署，因此拦截的逻辑应该放在background.js中，而非popup.js中。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 监听发送请求</span></span><br><span class="line">chrome.webRequest.onBeforeRequest.addListener(</span><br><span class="line">  <span class="function"><span class="keyword">function</span>(<span class="params">details</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(details);</span><br><span class="line">    <span class="comment">//拦截到执行资源后，为资源进行重定向</span></span><br><span class="line">    <span class="comment">//也就是是只要请求的资源匹配拦截规则，就转而执行returnjs.js</span></span><br><span class="line">    <span class="keyword">return</span> &#123;redirectUrl: chrome.extension.getURL(<span class="string">"returnjs.js"</span>)&#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">//配置拦截匹配的url，数组里域名下的资源都将被拦截</span></span><br><span class="line">    urls: [</span><br><span class="line">        <span class="string">"*://*.jquery.top/*"</span>,</span><br><span class="line">        <span class="string">"*://*.elongstatic.com/*"</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="comment">//拦截的资源类型，在这里只拦截script脚本，也可以拦截image等其他静态资源</span></span><br><span class="line">    types: [<span class="string">"script"</span>]</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">//要执行的操作，这里配置为阻断</span></span><br><span class="line">  [<span class="string">"blocking"</span>]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<p>在这里，拦截资源我们用到了一个监听事件：<code>chrome.webRequest.onBeforeRequest.addListener()</code>，只要有匹配域名下的资源将要发送请求，就立即执行回调：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">chrome.webRequest.onBeforeRequest.addListener(</span><br><span class="line">    callback, filter, opt_extraInfoSpec</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-<p>回调函数所接收到的信息对象均包括如下属性：<code>requestId</code>、<code>url</code>、<code>method</code>、<code>frameId</code>、<code>parentFrameId</code>、<code>tabId</code>、<code>type</code>和<code>timeStamp</code>。其中type可能的值包括<code>main_frame</code>、<code>sub_frame</code>、<code>stylesheet</code>、<code>script</code>、<code>image</code>、<code>object</code>、<code>xmlhttprequest</code>和<code>other</code>。</p>
-<h2 id="拦截指定域名下资源后弹出通知窗口">拦截指定域名下资源后弹出通知窗口</h2><p>在拦截到指定资源后，比较好的体验是告诉用户页面资源已被拦截，这样就可以使用chrome的通知接口向用户发出通知。<code>chrome.notifications.create()</code>可以帮我们做到向用户发出浏览器通知。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 弹出通知</span></span><br><span class="line">chrome.notifications.clear(<span class="string">"newNotice"</span>, <span class="function"><span class="keyword">function</span>(<span class="params"> wasClear </span>) </span>&#123;</span><br><span class="line">    chrome.notifications.create(<span class="string">"newNotice"</span>, &#123;</span><br><span class="line">    type: <span class="string">"basic"</span>,</span><br><span class="line">    iconUrl: chrome.runtime.getURL(<span class="string">"images/logo.png"</span>),</span><br><span class="line">    title: <span class="string">"页面JS拦截提醒"</span>,</span><br><span class="line">    message: <span class="string">"拓展将开启页面JS拦截，若要恢复js执行请关闭拓展。"</span></span><br><span class="line">    &#125;, <span class="function"><span class="keyword">function</span>(<span class="params"> notificationId </span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(notificationId);</span><br><span class="line">    &#125; );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>chrome通知的API介绍，请阅读这篇文章：<a href="http://www.ihorve.com/?p=488" target="_blank" rel="external">Chrome插件桌面通知API的变化</a>。</p>
-<h2 id="普通方式注入js脚本">普通方式注入js脚本</h2><p>脚本的注入在前文已经介绍过，就是将指定的脚本资源在合适的时机放到页面中执行。在这里，我需要在拓展中输入远程脚本URL，在点击注入按钮后向页面注入，基本逻辑也很简单，就是通过ajax发送请求，在responseText返回时，将返回的脚本作为code注入到页面里。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获取远程脚本并进行普通注入</span></span><br><span class="line">  getScript: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    MainLogic.setInjectUrl();</span><br><span class="line">    <span class="keyword">var</span> url = MainLogic.injecturl;</span><br><span class="line">    <span class="keyword">if</span>( url ) &#123;</span><br><span class="line">      $(<span class="string">"#injectValue"</span>).removeClass(<span class="string">"errbox"</span>);</span><br><span class="line">      <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">      xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">          <span class="keyword">if</span> (xhr.status == <span class="number">200</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> code = xhr.responseText;</span><br><span class="line">            <span class="built_in">console</span>.log(code);</span><br><span class="line">            <span class="comment">//第一个参数为null时，表示注入的目标是当前打开的tab</span></span><br><span class="line">            <span class="comment">//获取到返回值时，通过code注入到页面中，在回调中打印注入成功的提示</span></span><br><span class="line">            chrome.tabs.executeScript(<span class="literal">null</span>, &#123;code: code, allFrames: <span class="literal">false</span>&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">              <span class="built_in">console</span>.log(<span class="string">"executeScript success!!!!!!!!!"</span>);</span><br><span class="line">            &#125;);</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $(<span class="string">'#xhr-errbox'</span>).show();</span><br><span class="line">            setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">              $(<span class="string">'#xhr-errbox'</span>).hide();</span><br><span class="line">            &#125;, <span class="number">2000</span>);</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">var</span> ts = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">      <span class="keyword">var</span> u;</span><br><span class="line">      <span class="keyword">if</span>(url.indexOf(<span class="string">'?'</span>) === -<span class="number">1</span>)&#123;</span><br><span class="line">        u = url + <span class="string">'?_t='</span> + ts;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        u = url + <span class="string">'&amp;_t='</span> + ts;</span><br><span class="line">      &#125;</span><br><span class="line">      xhr.open(<span class="string">'GET'</span>,u,<span class="literal">true</span>);</span><br><span class="line">      xhr.send(<span class="literal">null</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      $(<span class="string">"#injectValue"</span>).addClass(<span class="string">"errbox"</span>);</span><br><span class="line">      MainLogic.msgBox(<span class="string">"远程脚本不能为空！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
-<p>上述提到的注入方式中，注入时机是响应操作后进行注入，还有一种方式是通过内容脚本的方式如，也就是<code>content script</code>。这种方式需要在<code>manifest.json</code>中进行配置，即在拓展有访问权限的页面打开时立即向页面注入资源。如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"content_scripts"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">"matches"</span>: [<span class="string">"http://*/*"</span>],<span class="comment">//匹配url</span></span><br><span class="line">        <span class="string">"js"</span>: [<span class="string">"jquery-1.9.1.js"</span>],<span class="comment">//向匹配url中注入指定脚本</span></span><br><span class="line">                <span class="string">"css"</span>: [<span class="string">"css.css"</span>],<span class="comment">//向匹配url中注入css样式</span></span><br><span class="line">        <span class="string">"run_at"</span>: <span class="string">"document_end"</span><span class="comment">//注入时机，这里是在document节点加载完成时注入</span></span><br><span class="line">    &#125;</span><br><span class="line">],</span><br></pre></td></tr></table></figure>
-<p>具体的配置可参见360翻译的中文API文档。</p>
-<h2 id="通过requirejs向页面注入脚本">通过requirejs向页面注入脚本</h2><p>通过requirejs向页面注入脚本比普通方式稍有特殊，因为requirejs的执行需要在页面中引入require.js，并在data-main属性中配置入口脚本，所以使用普通方式注入显然不符合实际，这里的解决方案就是，在domready后向页面通过document.write的方式注入脚本。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 执行注入requirejs</span></span><br><span class="line">  injectRequire: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    MainLogic.setInjectUrl();</span><br><span class="line">    <span class="comment">//require.js打在拓展包中，通过chrome.extension.getURL来获取资源路径</span></span><br><span class="line">    <span class="keyword">var</span> requireurl = chrome.extension.getURL(<span class="string">"require.js"</span>);</span><br><span class="line">    <span class="keyword">var</span> datamainjs = MainLogic.injecturl;</span><br><span class="line">    <span class="keyword">if</span>( datamainjs ) &#123;</span><br><span class="line">      <span class="keyword">var</span> executeCode = <span class="string">''</span> +</span><br><span class="line">        <span class="string">'var scripts = document.getElementsByTagName("script");'</span> +</span><br><span class="line">        <span class="string">'[].forEach.call(scripts, function(script) &#123;'</span> +</span><br><span class="line">        <span class="string">'  if(!!script.src &amp;&amp; script.src == "'</span> + requireurl + <span class="string">'")&#123;'</span> +</span><br><span class="line">        <span class="string">'    script.parentNode.removeChild(script);'</span> +</span><br><span class="line">        <span class="string">'  &#125;'</span> +</span><br><span class="line">        <span class="string">'&#125;);'</span> +</span><br><span class="line">        <span class="string">'var Req_script = document.createElement("script");'</span> +</span><br><span class="line">        <span class="string">'Req_script.src = "'</span> + requireurl + <span class="string">'";'</span> +</span><br><span class="line">        <span class="string">'Req_script.setAttribute("data-main","'</span> + datamainjs + <span class="string">'");'</span> +</span><br><span class="line">        <span class="string">'document.body.appendChild(Req_script);'</span>;</span><br><span class="line">      chrome.tabs.executeScript(<span class="literal">null</span>, &#123;</span><br><span class="line">        code: executeCode</span><br><span class="line">      &#125;);</span><br><span class="line">      MainLogic.msgBox(<span class="string">"已成功注入！"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      $(<span class="string">"#injectValue"</span>).addClass(<span class="string">"errbox"</span>);</span><br><span class="line">      MainLogic.msgBox(<span class="string">"远程脚本不能为空！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
-<p>从那个面的代码中可以看出，首先需要将拓展包内的资源路径取出，然后将要注入的脚本内容拼接成字符串，最后进行执行。这里还有一个问题，就是通过<code>chrome.extension.getURL</code>来获取包内资源的路径。在获取路径的时候，需要通过manifest.json文件中的的<code>web_accessible_resources</code>属性为资源配置访问权限。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"web_accessible_resources"</span>: [</span><br><span class="line">    <span class="string">"require.js"</span>,</span><br><span class="line">    <span class="string">"returnjs.js"</span>,</span><br><span class="line">    <span class="string">"images/*"</span> <span class="comment">//images目录下的所有资源，拓展都将有权访问</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<h2 id="测试你的chrome拓展">测试你的chrome拓展</h2><p>因为在正式上线到chrome拓展托管平台需要将拓展包打包成.crx格式的文件，所以我们刚才所做的一切都只是开发版，那开发版如何测试呢？其实非常简单，你只需要在Chrome浏览器中打开chrome://extensions/，点击“加载已解压的拓展程序”，选中你的拓展开发目录，拓展小图标就出来了。当你拓展的代码有更改时，记得点一下“重新加载”按钮，重新加载你的拓展程序，以保证你能看到的拓展是最新的版本。</p>
-<p><img src="/images/chrome/chrome-3.jpg" alt="3"></p>
-<p>里面的“权限”就是你在manifest.json文件的permissions中配置的url。</p>
-<p>到这里，开发流程和功能点相关的API都已介绍完毕，整体来说开发一个chrome拓展并不复杂，只要找到对应的API，然后理清background.js和拓展页面js以及要注入到标签页面中的js之间的逻辑关系，并且知道如何通过监听事件互相发送和接受消息，一个满足你不同需求的chrome拓展就很容易开发出来。因博主也是第一次接触chrome拓展开发，如果在文章中有地方描述有误，欢迎在评论中指出。也希望本文的分享能为大家带来一些解决问题的思路。</p>
-<p>项目源码已经开放到github：<a href="https://github.com/Horve/js-inject" target="_blank" rel="external">点击这里</a>，欢迎各种fork star~</p>
-<h2 id="外部API资源文档">外部API资源文档</h2><p>360极速浏览器开放平台（chrome官方API的中文版本，但不是最新）： <a href="http://open.chrome.360.cn/extension_dev/overview.html" target="_blank" rel="external">http://open.chrome.360.cn/extension_dev/overview.html</a></p>
-<p>chrome插件中文开发文档（非官方，与官方文档一致，不用翻墙）： <a href="http://chrome.liuyixi.com/overview.html" target="_blank" rel="external">http://chrome.liuyixi.com/overview.html</a></p>
-<p>Chrome扩展及应用开发（电子书）： <a href="http://www.ituring.com.cn/book/1472" target="_blank" rel="external">http://www.ituring.com.cn/book/1472</a></p>
-</div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/chrome/" class="post__tag__link">chrome</a></li><li class="post__tag__item"><a href="/tags/chrome拓展/" class="post__tag__link">chrome拓展</a></li><li class="post__tag__item"><a href="/tags/原创/" class="post__tag__link">原创</a></li></ul><a class="post__foot-link u-fr"></a></footer></article><article class="post"><header class="post__head"><time datetime="2015-09-14T12:15:31.000Z" class="post__time">September 14, 2015</time><h1 class="post__title"><a href="/2015/09/14/performanceAPI/">使用性能API快速分析web前端性能</a></h1><hr/></header><div class="post__main echo"><p>页面的性能问题一直是产品开发过程中的重要一环，很多公司也一直在使用各种方式监控产品的页面性能。从控制台工具、Fiddler抓包工具，到使用<code>DOMContentLoaded</code>和<code>document.onreadystatechange</code>这种侵入式javascript代码方式来检测DOM事件发生和结束的时间，再到使用第三方工具如<code>WebPagetest</code>、<code>Pingdom</code>等通过在不同的浏览器环境和地域进行测试来寻求优化建议等等，这些方式不仅麻烦，而且测量的指标比较单一。如果有一些可以帮我们直接获取页面性能信息的API出现，并且成为标准被被浏览器厂商支持，那性能监控会不会又是另一幅蓝图？</p>
-<a id="more"></a>
-<p>好在W3C Web性能工作小组与各浏览器厂商都已认识到性能对于web开发的重要性，为了解决当前性能测试的困难，W3C推出了一套性能API标准，各种浏览器对这套标准的支持如今也逐渐成熟起来。这套API的目的是简化开发者对网站性能进行精确分析与控制的过程，方便开发者采取手段提高web性能。</p>
-<p>整套标准包含了10余种API，各自针对性能检测的某个方面。在下图中可以看到它们当前在规范流程中的进展：</p>
-<p><img src="/images/performance/1.png" alt="API进展"></p>
-<h2 id="下面是API及描述其功能的列表：">下面是API及描述其功能的列表：</h2><table>
-<thead>
-<tr>
-<th style="text-align:left">API</th>
-<th style="text-align:left">名称</th>
-<th style="text-align:left">功能</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Navigation Timing</td>
-<td style="text-align:left">导航计时</td>
-<td style="text-align:left">能够帮助网站开发者检测真实用户数据（RUM），例如带宽、延迟或主页的整体页面加载时间。</td>
-</tr>
-<tr>
-<td style="text-align:left">Resource Timing</td>
-<td style="text-align:left">资源计时</td>
-<td style="text-align:left">对单个资源的计时，可以对细粒度的用户体验进行检测。</td>
-</tr>
-<tr>
-<td style="text-align:left">High Resolution Timing</td>
-<td style="text-align:left">高精度计时</td>
-<td style="text-align:left">该API规范所定义的JavaScript接口能够提供精确到微秒级的当前时间，并且不会受到系统时钟偏差或调整的影响。</td>
-</tr>
-<tr>
-<td style="text-align:left">Page Visibility</td>
-<td style="text-align:left">页面可见性</td>
-<td style="text-align:left">通过这一规范，网站开发者能够以编程方式确定页面的当前可见状态，从而使网站能够更有效地利用电源与CPU。当页面获得或失去焦点时，文档对象的visibilitychange事件便会被触发。</td>
-</tr>
-<tr>
-<td style="text-align:left">Performance Timeline</td>
-<td style="text-align:left">性能时间线</td>
-<td style="text-align:left">以一个统一的接口获取由Navigation Timing、Resourcing Timing和User Timing所收集的性能数据。</td>
-</tr>
-<tr>
-<td style="text-align:left">Battery Status</td>
-<td style="text-align:left">电池状态</td>
-<td style="text-align:left">能够检测当前设备的电池状态，例如是否正在充电、电量等级。可以根据当前电量决定是否显示某些内容，对于移动设备来说非常实用。</td>
-</tr>
-<tr>
-<td style="text-align:left">User Timing</td>
-<td style="text-align:left">用户计时</td>
-<td style="text-align:left">可以对某段代码、函数进行自定义计时，以了解这段代码的具体运行时间。</td>
-</tr>
-<tr>
-<td style="text-align:left">Beacon</td>
-<td style="text-align:left">灯塔</td>
-<td style="text-align:left">可以将分析结果或诊断代码发送给服务器，它采用了异步执行的方式，因此不会影响页面中其它代码的运行。</td>
-</tr>
-<tr>
-<td style="text-align:left">Animation Timing</td>
-<td style="text-align:left">动画计时</td>
-<td style="text-align:left">通过requestAnimationFrame函数让浏览器精通地控制动画的帧数，能够有效地配合显示器的刷新率，提供更平滑的动画效果，减少对CPU和电池的消耗。</td>
-</tr>
-<tr>
-<td style="text-align:left">Resource Hits</td>
-<td style="text-align:left">资源提示</td>
-<td style="text-align:left">通过html属性指定资源的预加载，例如在浏览相册时能够预先加载下一张图片，加快翻页的显示速度。</td>
-</tr>
-<tr>
-<td style="text-align:left">Frame Timing</td>
-<td style="text-align:left">帧计时</td>
-<td style="text-align:left">通过一个接口获取与帧相关的性能数据，例如每秒帧数和TTF。</td>
-</tr>
-<tr>
-<td style="text-align:left">Navigation Error Logging</td>
-<td style="text-align:left">错误日志记录</td>
-<td style="text-align:left">通过一个接口存储及获取与某个文档相关的错误记录。</td>
-</tr>
-</tbody>
-</table>
-<h2 id="浏览器支持">浏览器支持</h2><p>下表列举了当前主流浏览器对性能API的支持，其中标注星号的内容并非来自于Web性能工作小组。</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">规范</th>
-<th style="text-align:center">IE</th>
-<th style="text-align:center">Firefox</th>
-<th style="text-align:center">Chrome</th>
-<th style="text-align:center">Safari</th>
-<th style="text-align:center">Opera</th>
-<th style="text-align:center">iOS Safari</th>
-<th style="text-align:center">Android</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Navigation Timing</td>
-<td style="text-align:center">9</td>
-<td style="text-align:center">31</td>
-<td style="text-align:center">全部</td>
-<td style="text-align:center">8</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">8 (不包括 8.1)</td>
-<td style="text-align:center">4.1</td>
-</tr>
-<tr>
-<td style="text-align:left">High Resolution Timing</td>
-<td style="text-align:center">10</td>
-<td style="text-align:center">31</td>
-<td style="text-align:center">全部</td>
-<td style="text-align:center">8</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">8 (不包括 8.1)</td>
-<td style="text-align:center">4.4</td>
-</tr>
-<tr>
-<td style="text-align:left">Page Visibility</td>
-<td style="text-align:center">10</td>
-<td style="text-align:center">31</td>
-<td style="text-align:center">全部</td>
-<td style="text-align:center">7</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">7.1</td>
-<td style="text-align:center">4.4</td>
-</tr>
-<tr>
-<td style="text-align:left">Resource Timing</td>
-<td style="text-align:center">10</td>
-<td style="text-align:center">34</td>
-<td style="text-align:center">全部</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">4.4</td>
-</tr>
-<tr>
-<td style="text-align:left">Battery Status*</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">31（部分支持）</td>
-<td style="text-align:center">38</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-<tr>
-<td style="text-align:left">User Timing</td>
-<td style="text-align:center">10</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">全部</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">4.4</td>
-</tr>
-<tr>
-<td style="text-align:left">Beacon</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">31</td>
-<td style="text-align:center">39</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-<tr>
-<td style="text-align:left">Animation Timing</td>
-<td style="text-align:center">10</td>
-<td style="text-align:center">31</td>
-<td style="text-align:center">全部</td>
-<td style="text-align:center">6.1</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">7.1</td>
-<td style="text-align:center">4.4</td>
-</tr>
-<tr>
-<td style="text-align:left">Resource Hints</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">仅限Canary版</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-<tr>
-<td style="text-align:left">Frame Timing</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-<tr>
-<td style="text-align:left">Navigation Error Logging</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-<tr>
-<td style="text-align:left">WebP*</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">全部</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">4.1</td>
-</tr>
-<tr>
-<td style="text-align:left">Picture element and srcset attribute *</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">38</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">26</td>
-<td style="text-align:center">-</td>
-<td style="text-align:center">-</td>
-</tr>
-</tbody>
-</table>
-<p>其中有两个可以帮助我们检测真实用户环境下的页面加载Timing和页面资源加载Timing: <code>Navigation Timing</code>和<code>Resource Timing</code>。这两个API非常有用，可以帮助我们获取页面的Domready时间、onload时间、白屏时间等，以及单个页面资源在从发送请求到获取到rsponse各阶段的性能参数。</p>
-<p>使用这两个API时需要在页面完全加载完成之后才能使用，最简单的办法是在window.onload事件中读取各种数据，因为很多值必须在页面完全加载之后才能得出。</p>
-<h2 id="Navigation_Timing">Navigation Timing</h2><p><code>Navigation Timing API</code>能够帮助网站开发者检测真实用户数据（RUM），例如带宽、延迟或主页的整体页面加载时间。用法如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> timinhObj = performance.timing;</span><br></pre></td></tr></table></figure>
-<p><code>performance.timing</code>返回的是一个<code>PerformanceTiming</code>对象，如下图：</p>
-<p><img src="/images/performance/performancetiming01.png" alt="PerformanceTiming"></p>
-<p>如果要获得 page load time(页面加载时间)，可以用<code>PerformanceTiming</code>对象中<code>loadEventStart</code>的值减去<code>navigationStart</code>的值：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plt = page.loadEventStart - page.navigationStart;</span><br></pre></td></tr></table></figure>
-<p>需要注意的是，<code>PerformanceTiming</code>对象中各属性值的单位均为毫秒数。</p>
-<p><code>PerformanceTiming</code>对象包含了各种与浏览器性能有关的时间数据，提供浏览器处理网页各个阶段的耗时，它包含的页面性能属性如下表：</p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>navigationStart</td>
-<td>准备加载新页面的起始时间</td>
-</tr>
-<tr>
-<td>redirectStart</td>
-<td>如果发生了HTTP重定向，并且从导航开始，中间的每次重定向，都和当前文档同域的话，就返回开始重定向的timing.fetchStart的值。其他情况，则返回0</td>
-</tr>
-<tr>
-<td>redirectEnd</td>
-<td>如果发生了HTTP重定向，并且从导航开始，中间的每次重定向，都和当前文档同域的话，就返回最后一次重定向，接收到最后一个字节数据后的那个时间.其他情况则返回0</td>
-</tr>
-<tr>
-<td>fetchStart</td>
-<td>如果一个新的资源获取被发起，则 fetchStart必须返回用户代理开始检查其相关缓存的那个时间，其他情况则返回开始获取该资源的时间</td>
-</tr>
-<tr>
-<td>domainLookupStart</td>
-<td>返回用户代理对当前文档所属域进行DNS查询开始的时间。如果此请求没有DNS查询过程，如长连接，资源cache,甚至是本地资源等。 那么就返回 fetchStart的值</td>
-</tr>
-<tr>
-<td>domainLookupEnd</td>
-<td>返回用户代理对结束对当前文档所属域进行DNS查询的时间。如果此请求没有DNS查询过程，如长连接，资源cache，甚至是本地资源等。那么就返回 fetchStart的值</td>
-</tr>
-<tr>
-<td>connectStart</td>
-<td>返回用户代理向服务器服务器请求文档，开始建立连接的那个时间，如果此连接是一个长连接，又或者直接从缓存中获取资源（即没有与服务器建立连接）。则返回domainLookupEnd的值</td>
-</tr>
-<tr>
-<td>(secureConnectionStart)</td>
-<td>可选特性。用户代理如果没有对应的东东，就要把这个设置为undefined。如果有这个东东，并且是HTTPS协议，那么就要返回开始SSL握手的那个时间。 如果不是HTTPS， 那么就返回0</td>
-</tr>
-<tr>
-<td>connectEnd</td>
-<td>返回用户代理向服务器服务器请求文档，建立连接成功后的那个时间，如果此连接是一个长连接，又或者直接从缓存中获取资源（即没有与服务器建立连接）。则返回domainLookupEnd的值</td>
-</tr>
-<tr>
-<td>requestStart</td>
-<td>返回从服务器、缓存、本地资源等，开始请求文档的时间</td>
-</tr>
-<tr>
-<td>responseStart</td>
-<td>返回用户代理从服务器、缓存、本地资源中，接收到第一个字节数据的时间</td>
-</tr>
-<tr>
-<td>responseEnd</td>
-<td>返回用户代理接收到最后一个字符的时间，和当前连接被关闭的时间中，更早的那个。同样，文档可能来自服务器、缓存、或本地资源</td>
-</tr>
-<tr>
-<td>domLoading</td>
-<td>返回用户代理把其文档的 “current document readiness” 设置为 “loading”的时候</td>
-</tr>
-<tr>
-<td>domInteractive</td>
-<td>返回用户代理把其文档的 “current document readiness” 设置为 “interactive”的时候.</td>
-</tr>
-<tr>
-<td>domContentLoadedEventStart</td>
-<td>返回文档发生 DOMContentLoaded事件的时间</td>
-</tr>
-<tr>
-<td>domContentLoadedEventEnd</td>
-<td>文档的DOMContentLoaded 事件的结束时间</td>
-</tr>
-<tr>
-<td>domComplete</td>
-<td>返回用户代理把其文档的 “current document readiness” 设置为 “complete”的时候</td>
-</tr>
-<tr>
-<td>loadEventStart</td>
-<td>文档触发load事件的时间。如果load事件没有触发，那么该接口就返回0</td>
-</tr>
-<tr>
-<td>loadEventEnd</td>
-<td>文档触发load事件结束后的时间。如果load事件没有触发，那么该接口就返回0</td>
-</tr>
-</tbody>
-</table>
-<p>一般来说，我们需要获取到的页面性能参数包括：<strong>DNS查询耗时、TCP链接耗时、request请求耗时、解析dom树耗时、白屏时间、domready时间、onload时间</strong>等，而这些参数是通过上面的<code>performance.timing</code>各个属性的差值组成的，计算方法如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">DNS查询耗时 ：domainLookupEnd - domainLookupStart</span><br><span class="line">TCP链接耗时 ：connectEnd - connectStart</span><br><span class="line">request请求耗时 ：responseEnd - responseStart</span><br><span class="line">解析dom树耗时 ： domComplete - domInteractive</span><br><span class="line">白屏时间 ：responseStart - navigationStart</span><br><span class="line">domready时间 ：domContentLoadedEventEnd - navigationStart</span><br><span class="line">onload时间 ：loadEventEnd - navigationStart</span><br></pre></td></tr></table></figure>
-<p><code>Navigation Timing</code>的目的是用于分析页面整体性能指标。如果要获取个别资源（例如JS、图片）的性能指标，就需要使用<code>Resource Timing API</code>。</p>
-<h2 id="Resource_Timing">Resource Timing</h2><p>浏览器获取网页时，会对网页中每一个静态资源（脚本文件、样式表、图片文件等等）发出一个HTTP请求。<code>Resource Timing</code>可以获取到单个静态资源从开始发出请求到获取响应之间各个阶段的Timing。用法如下:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> resourcesObj = performance.getEntries();</span><br></pre></td></tr></table></figure>
-<p><code>Resource Timing</code>返回的是一个对象数组，数组的每一个项都是一个对象，这个对象中包含了当前静态资源的加载Timing，如下图：</p>
-<p><img src="/images/performance/performancetiming02.png" alt="PerformanceTiming"></p>
-<p>我们可以根据数组的长度获取到页面中静态资源的数量，然后通过数组的每一项分析单个静态资源的请求状态。</p>
-<p><code>performance</code>中还有一些性能API尚未成为W3C标准（如第一张图中的工作进度），有的处于编辑草案阶段，有的处于工作草案阶段，当这些API逐渐成为推荐标准以后，一定会对我们进行前端性能监控带来很大的便利，我们也可以通过这些API很方便地直接从页面中获取到我们希望得到的性能信息。</p>
-<h2 id="相关资源">相关资源</h2><p><a href="http://javascript.ruanyifeng.com/bom/performance.html" target="_blank" rel="external">performance API</a></p>
-<p><a href="https://github.com/fredshare/blog/issues/5" target="_blank" rel="external">window.performance 详解</a></p>
-<p><a href="http://www.cnblogs.com/mrsunny/archive/2012/09/04/2670727.html" target="_blank" rel="external">使用简洁的 Navigation Timing API 测试网页加载速度（不完全译文）</a></p>
-</div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/performance/" class="post__tag__link">performance</a></li><li class="post__tag__item"><a href="/tags/前端性能/" class="post__tag__link">前端性能</a></li><li class="post__tag__item"><a href="/tags/原创/" class="post__tag__link">原创</a></li></ul><a class="post__foot-link u-fr"></a></footer></article><article class="post"><header class="post__head"><time datetime="2015-09-08T08:28:17.000Z" class="post__time">September 8, 2015</time><h1 class="post__title"><a href="/2015/09/08/har-detail/">HAR文件详细解析</a></h1><hr/></header><div class="post__main echo"><p>HAR（HTTP档案规范），是一个用来储存HTTP请求/响应信息的通用文件格式，基于JSON。这种格式的数据可以使HTTP监测工具以一种通用的格式导出所收集的数据，这些数据可以被其他支持HAR的HTTP分析工具（包括Firebug、httpwatch、Fiddler等）所使用，来分析网站的性能瓶颈。</p>
-<p>目前HAR规范最新版本为HAR 1.2。HAR文件必须是UTF-8编码，有无BOM无所谓。如下是一个HAR文件的详细介绍。</p>
-<a id="more"></a>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"log"</span>: &#123;</span><br><span class="line">        <span class="string">"version"</span>: <span class="string">"1.2"</span>,</span><br><span class="line">        <span class="string">"creator"</span>: &#123;</span><br><span class="line">            <span class="string">"name"</span>: <span class="string">"shun.zheng"</span>,</span><br><span class="line">            <span class="string">"version"</span>: <span class="string">"1.1.8"</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">"pages"</span>: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">"startedDateTime"</span>: <span class="string">"2015-09-06T10:02:41.663Z"</span>, <span class="comment">// 页面开始加载的时间（格式：ISO 8601）</span></span><br><span class="line">                <span class="string">"id"</span>: <span class="string">"http://www.ihorve.com/"</span>, <span class="comment">// 页面唯一标示符，即页面url</span></span><br><span class="line">                <span class="string">"title"</span>: <span class="string">"Horve后花园"</span>, <span class="comment">// 页面标题</span></span><br><span class="line">                <span class="string">"pageTimings"</span>: &#123; <span class="comment">// 关于页面加载时间的详细信息</span></span><br><span class="line">                    <span class="string">"onContentLoad"</span>: <span class="number">1720</span>, <span class="comment">// 可选，页面开始加载到页面内容加载完毕之间的毫秒数</span></span><br><span class="line">                    <span class="string">"onLoad"</span>: <span class="number">2500</span>, <span class="comment">// 可选，页面开始加载到页面onload之间的毫秒数</span></span><br><span class="line">                    <span class="string">"comment"</span>: <span class="string">""</span> <span class="comment">// 可选，由用户或应用程序提供的注释</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        ],</span><br><span class="line">        <span class="string">"entries"</span>: [ <span class="comment">// 包含全部请求的数组，数组的每一项是一条请求的数据构成的对象，根据startedDateTime排序</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">"startedDateTime"</span>: <span class="string">"2015-09-06T10:02:41.645Z"</span>, <span class="comment">// 请求发出的时间(ISO 8601)</span></span><br><span class="line">                <span class="string">"time"</span>: <span class="number">1221</span>, <span class="comment">// 该条请求花费的总的毫秒数</span></span><br><span class="line">                <span class="string">"request"</span>: &#123; <span class="comment">// 请求的详细情况</span></span><br><span class="line">                    <span class="string">"method"</span>: <span class="string">"GET"</span>, <span class="comment">// 请求方式</span></span><br><span class="line">                    <span class="string">"url"</span>: <span class="string">"http://www.ihorve.com/"</span>, <span class="comment">// 请求的url</span></span><br><span class="line">                    <span class="string">"httpVersion"</span>: <span class="string">"HTTP/1.1"</span>, <span class="comment">// http协议版本号</span></span><br><span class="line">                    <span class="string">"cookies"</span>: [], <span class="comment">// cookie对象列表</span></span><br><span class="line">                    <span class="string">"headers"</span>: [ <span class="comment">// header信息</span></span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"User-Agent"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"Mozilla/5.0 (Macintosh; Intel Mac OS X) AppleWebKit/534.34 (KHTML, like Gecko) PhantomJS/1.9.8 Safari/534.34"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Accept"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    ],</span><br><span class="line">                    <span class="string">"queryString"</span>: [], <span class="comment">// 查询参数对象的列表</span></span><br><span class="line">                    <span class="string">"headersSize"</span>: -<span class="number">1</span>, <span class="comment">// 从HTTP请求消息的开始，直到（且包括）的主体之前的双CRLF的总字节数，不可用设置为-1</span></span><br><span class="line">                    <span class="string">"bodySize"</span>: -<span class="number">1</span> <span class="comment">// 消息体的粽子节数，不可用设置为-1</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"response"</span>: &#123; <span class="comment">// 响应的详细情况</span></span><br><span class="line">                    <span class="string">"status"</span>: <span class="number">200</span>, <span class="comment">// 状态码</span></span><br><span class="line">                    <span class="string">"statusText"</span>: <span class="string">"OK"</span>,</span><br><span class="line">                    <span class="string">"httpVersion"</span>: <span class="string">"HTTP/1.1"</span>,</span><br><span class="line">                    <span class="string">"cookies"</span>: [], <span class="comment">// cookie对象列表</span></span><br><span class="line">                    <span class="string">"headers"</span>: [ <span class="comment">// 响应头信息列表</span></span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Server"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"nginx"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Date"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"Sun, 06 Sep 2015 09:59:22 GMT"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Content-Type"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"text/html; charset=UTF-8"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Transfer-Encoding"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"chunked"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Connection"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"keep-alive"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Keep-Alive"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"timeout=60"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"X-Pingback"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"http://www.ihorve.com/xmlrpc.php"</span></span><br><span class="line">                        &#125;,</span><br><span class="line">                        &#123;</span><br><span class="line">                            <span class="string">"name"</span>: <span class="string">"Content-Encoding"</span>,</span><br><span class="line">                            <span class="string">"value"</span>: <span class="string">"gzip"</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    ],</span><br><span class="line">                    <span class="string">"redirectURL"</span>: <span class="string">""</span>, <span class="comment">// 从响应头位置重定向目标URL</span></span><br><span class="line">                    <span class="string">"headersSize"</span>: -<span class="number">1</span>, <span class="comment">// 从HTTP响应消息的开始，直到（且包括）的主体之前的双CRLF的总字节数，不可用设置为-1</span></span><br><span class="line">                    <span class="string">"bodySize"</span>: <span class="number">65047</span>, <span class="comment">// 响应体的字节数</span></span><br><span class="line">                    <span class="string">"content"</span>: &#123; <span class="comment">// 响应体的详细信息</span></span><br><span class="line">                        <span class="string">"size"</span>: <span class="number">65047</span>, <span class="comment">// 响应体的字节数</span></span><br><span class="line">                        <span class="string">"mimeType"</span>: <span class="string">"text/html; charset=UTF-8"</span> <span class="comment">// 响应体的mimeType</span></span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"cache"</span>: &#123; <span class="comment">// 请求从浏览器缓存的信息</span></span><br><span class="line">                    <span class="string">"beforeRequest"</span>: &#123;&#125;, <span class="comment">// 可选，请求前缓存条目的状态</span></span><br><span class="line">                    <span class="string">"afterRequest"</span>: &#123;&#125;, <span class="comment">// 可选，请求后缓存条目的状态</span></span><br><span class="line">                    <span class="string">"comment"</span>: <span class="string">""</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"timings"</span>: &#123; <span class="comment">// 发送请求到收到响应各阶段的时间，单位均为毫秒</span></span><br><span class="line">                    <span class="string">"blocked"</span>: <span class="number">0</span>, <span class="comment">// 可选，等待网络连接的时间</span></span><br><span class="line">                    <span class="string">"dns"</span>: -<span class="number">1</span>, <span class="comment">// 可选，dns解析时间，不可用设置为-1</span></span><br><span class="line">                    <span class="string">"connect"</span>: -<span class="number">1</span>, <span class="comment">// 可选，创建TCP连接的时间，不可用设置为-1</span></span><br><span class="line">                    <span class="string">"send"</span>: <span class="number">0</span>, <span class="comment">// 发送HTTP请求到服务器的时间</span></span><br><span class="line">                    <span class="string">"wait"</span>: <span class="number">1126</span>, <span class="comment">// 等待响应的时间</span></span><br><span class="line">                    <span class="string">"receive"</span>: <span class="number">95</span>, <span class="comment">// 从服务器接收或从缓存读取的时间</span></span><br><span class="line">                    <span class="string">"ssl"</span>: -<span class="number">1</span> <span class="comment">// 可选，SSL/TLS协商需要的时间，不可用设置为-1</span></span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">"pageref"</span>: <span class="string">"http://www.ihorve.com/"</span> <span class="comment">// 可选，唯一，参照的父页面，如果应用不支持页面分组，可忽略此项配置</span></span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/har/" class="post__tag__link">har</a></li><li class="post__tag__item"><a href="/tags/phantomjs/" class="post__tag__link">phantomjs</a></li><li class="post__tag__item"><a href="/tags/原创/" class="post__tag__link">原创</a></li></ul><a class="post__foot-link u-fr"></a></footer></article><article class="post"><header class="post__head"><time datetime="2015-09-01T03:00:00.000Z" class="post__time">September 1, 2015</time><h1 class="post__title"><a href="/2015/09/01/js-inject/">chrome浏览器拓展——js脚本拦截及注入</a></h1><hr/></header><div class="post__main echo"><h3 id="概要">概要</h3><p>该浏览器拓展插件是拥有为页面拦截和注入js功能的chrome浏览器扩展，可以拦截页面脚本、检索页面脚本文件、下载页面脚本文件、为页面注入js文件，以及为页面注入requirejs和requirejs入口文件。<br><a id="more"></a></p>
-<h3 id="安装方式">安装方式</h3><h4 id="拓展为开发版本，尚未打包发布，安装时需要将项目文件更新到本地，具体如下：">拓展为开发版本，尚未打包发布，安装时需要将项目文件更新到本地，具体如下：</h4><ul>
-<li><p>1，更新项目到本地目录，如：/users/js_inject</p>
-</li>
-<li><p>2，在chrome浏览器中打开 chrome://extensions/ </p>
-</li>
-<li><p>3，点击“加载正在开发的拓展程序”按钮</p>
-</li>
-<li><p>4，选择/users/js_inject目录，确定</p>
-</li>
-<li><p>5，浏览器地址栏右边的艺龙logo小图标，即为拓展插件的入口</p>
-</li>
-</ul>
-<h3 id="自定义">自定义</h3><h4 id="在本版插件中，预设了一些默认设定，可以根据实际需求进行修改。功能点、配置文件位置、如何修改详情如下：">在本版插件中，预设了一些默认设定，可以根据实际需求进行修改。功能点、配置文件位置、如何修改详情如下：</h4><h4 id="1，配置需要开启js拦截功能的站点域名。“background-js”_文件中的如下位置：">1，配置需要开启js拦截功能的站点域名。“background.js” 文件中的如下位置：</h4><pre><code><span class="symbol">urls:</span> [
-    <span class="string">"*://*.jquery.top/*"</span>, <span class="regexp">//</span>域名过滤器，*<span class="symbol">://*/*</span> 表示所有协议、所有域名、域名下的所有资源均匹配 
-    <span class="string">"*://*.baidu.com/*"</span>
-],
-</code></pre><h4 id="2，配置拓展启动时需要向页面注入的资源。“manifest-json”_文件中的如下位置：">2，配置拓展启动时需要向页面注入的资源。“manifest.json” 文件中的如下位置：</h4><pre><code><span class="string">"content_scripts"</span>: [
-    {
-        <span class="string">"matches"</span>: [<span class="string">"http://*/*"</span>], <span class="comment">//域名过滤器</span>
-        <span class="string">"js"</span>: [<span class="string">"jquery-1.9.1.js"</span>], <span class="comment">//需要向页面中注入的脚本资源</span>
-        <span class="string">"run_at"</span>: <span class="string">"document_end"</span>   <span class="comment">//注入时机，该选项表明是文档节点加载完成后注入</span>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Category: 原创 | Horve的前端笔记</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Horve的前端笔记">
+<meta property="og:url" content="http://yoursite.com/categories/原创/index.html">
+<meta property="og:site_name" content="Horve的前端笔记">
+<meta property="og:description">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Horve的前端笔记">
+<meta name="twitter:description">
+  
+    <link rel="alternative" href="/atom.xml" title="Horve的前端笔记" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/images/headpic.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Horve</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">栽栽花，种种草，每天进来逛一逛</p>
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						<div class="icon-wrap icon-link hide" data-idx="2">
+							<div class="loopback_l"></div>
+							<div class="loopback_r"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>菜单</li>
+						<li>标签</li>
+						
+						<li>友情链接</li>
+						
+						
+						<li>关于我</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">主页</a></li>
+				        
+							<li><a href="/archives">所有文章</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="/#" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+					        
+								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+					        
+								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+					        
+						</div>
+					</nav>
+				</section>
+				
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Live-Nodelist/" style="font-size: 10px;">Live Nodelist</a> <a href="/tags/Static-Nodelist/" style="font-size: 10px;">Static Nodelist</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/chrome-extension/" style="font-size: 10px;">chrome-extension</a> <a href="/tags/chrome拓展/" style="font-size: 10px;">chrome拓展</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/domContentLoaded/" style="font-size: 10px;">domContentLoaded</a> <a href="/tags/domready/" style="font-size: 10px;">domready</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/har/" style="font-size: 10px;">har</a> <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/phantomjs/" style="font-size: 15px;">phantomjs</a> <a href="/tags/timeline/" style="font-size: 10px;">timeline</a> <a href="/tags/前端性能/" style="font-size: 15px;">前端性能</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/自定义事件/" style="font-size: 10px;">自定义事件</a> <a href="/tags/转载/" style="font-size: 15px;">转载</a>
+					</div>
+				</section>
+				
+				
+				
+				<section class="switch-part switch-part3">
+					<div id="js-friends">
+					
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
+			        
+			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
+			        
+			        </div>
+				</section>
+				
+
+				
+				
+				<section class="switch-part switch-part4">
+				
+					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>				
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">Horve</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+			
+				<img lazy-src="/images/headpic.jpg" class="js-avatar">
+			
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Horve</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">栽栽花，种种草，每天进来逛一逛</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/archives">所有文章</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="/#" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
+			        
+						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
+			        
+						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap">
+  
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2015" class="archive-year">2015</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2015/11/10/custom-event/" class="archive-article-date">
+  	<time datetime="2015-11-10T09:53:31.000Z" itemprop="datePublished">Nov 10</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title art-list-title" href="/2015/11/10/custom-event/">javascript自定义事件浅析</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/event/">event</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自定义事件/">自定义事件</a></li></ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/javascript/">javascript</a>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2015/10/26/timeline/" class="archive-article-date">
+  	<time datetime="2015-10-26T06:59:25.000Z" itemprop="datePublished">Oct 26</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title art-list-title" href="/2015/10/26/timeline/">使用Chrome DevTools的Timeline分析页面性能</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/timeline/">timeline</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端性能/">前端性能</a></li></ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/tools/">tools</a>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2015/10/17/domcontentloaded/" class="archive-article-date">
+  	<time datetime="2015-10-17T08:01:54.000Z" itemprop="datePublished">Oct 17</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title art-list-title" href="/2015/10/17/domcontentloaded/">Javascript中的domReady引入机制</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/domContentLoaded/">domContentLoaded</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/domready/">domready</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/domready/">domready</a><a class="article-category-link" href="/categories/原创/domready/domContentLoaded/">domContentLoaded</a>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2015/10/17/chrome-extension/" class="archive-article-date">
+  	<time datetime="2015-10-16T16:06:12.000Z" itemprop="datePublished">Oct 17</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title art-list-title" href="/2015/10/17/chrome-extension/">chrome拓展开发实战：页面脚本的拦截注入</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrome/">chrome</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrome拓展/">chrome拓展</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/chrome-extension/">chrome-extension</a>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2015/09/14/performanceAPI/" class="archive-article-date">
+  	<time datetime="2015-09-14T12:15:31.000Z" itemprop="datePublished">Sep 14</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title art-list-title" href="/2015/09/14/performanceAPI/">使用性能API快速分析web前端性能</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/performance/">performance</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端性能/">前端性能</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/前端性能/">前端性能</a><a class="article-category-link" href="/categories/原创/前端性能/performanceAPI/">performanceAPI</a><a class="article-category-link" href="/categories/原创/前端性能/performanceAPI/navigation/">navigation</a>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2015/09/08/har-detail/" class="archive-article-date">
+  	<time datetime="2015-09-08T08:28:17.000Z" itemprop="datePublished">Sep 8</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title art-list-title" href="/2015/09/08/har-detail/">HAR文件详细解析</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/har/">har</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phantomjs/">phantomjs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/har/">har</a>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2015/09/01/js-inject/" class="archive-article-date">
+  	<time datetime="2015-09-01T03:00:00.000Z" itemprop="datePublished">Sep 1</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title art-list-title" href="/2015/09/01/js-inject/">chrome浏览器拓展——js脚本拦截及注入</a>
+    </h1>
+  
+
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrome/">chrome</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrome-extension/">chrome-extension</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/chrome-extension/">chrome-extension</a><a class="article-category-link" href="/categories/原创/chrome-extension/markdown/">markdown</a>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+  
+    </div></section>
+  
+
+    
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2016 Horve
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: false,
+		isArchive: false,
+		isTag: false,
+		isCategory: true,
+		open_in_new: false
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="/js/main.js" type="text/javascript"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
     }
-],
-</code></pre><h4 id="3，配置拓展包内资源引用权限。“manifest-json”_文件中的如下位置：">3，配置拓展包内资源引用权限。“manifest.json” 文件中的如下位置：</h4><pre><code><span class="string">"web_accessible_resources"</span>: [
-    <span class="string">"require.js"</span>,
-    <span class="string">"returnjs.js"</span>,
-    <span class="string">"images/*"</span>
-]
-</code></pre><h3 id="功能点">功能点</h3><h4 id="1，脚本拦截功能">1，脚本拦截功能</h4><p>打开拦截匹配的域名链接后，拓展会自动拦截页面中引入的所有的外部脚本资源。</p>
-<h4 id="2，js脚本检索功能">2，js脚本检索功能</h4><p>打开拓展界面后，即会加载出页面中所有引用的外部js脚本列表，可以通过“检索URL”输入框对脚本关键字进行检索。</p>
-<h4 id="3，下载选中脚本">3，下载选中脚本</h4><p>点击“下载选中脚本”按钮可以下载已经选中的检索出的脚本文件。</p>
-<h4 id="4，向页面中注入指定脚本（远程脚本）">4，向页面中注入指定脚本（远程脚本）</h4><p>4.1  普通注入方式</p>
-<p>普通注入方式将直接向页面中注入在“脚本URL”文本框中输入的远程脚本并立即执行。</p>
-<p>4.2 requirejs入口脚本方式注入</p>
-<p>该方式将首先向页面注入require.js，随后将把“脚本URL”文本框中输入的远程脚本作为requirejs的入口脚本执行。</p>
-<p>注：脚本URL文本框中默认的远程url即通过requirejs入口脚本方式注入的demo，注入的main.js文件将依赖jQuery.js和另一个自定义模块count.js，注入后会更改页面背景色为红色，并在控制台输出“111+222”的计算结果。</p>
-<h3 id="外部API资源文档">外部API资源文档</h3><p>360极速浏览器开放平台（chrome官方API的中文版本，但不是最新）： <a href="http://open.chrome.360.cn/extension_dev/overview.html" target="_blank" rel="external">http://open.chrome.360.cn/extension_dev/overview.html</a></p>
-<p>chrome插件中文开发文档（非官方，与官方文档一致，不用翻墙）： <a href="http://chrome.liuyixi.com/overview.html" target="_blank" rel="external">http://chrome.liuyixi.com/overview.html</a></p>
-<p>Chrome扩展及应用开发（电子书）： <a href="http://www.ituring.com.cn/book/1472" target="_blank" rel="external">http://www.ituring.com.cn/book/1472</a></p>
-</div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/chrome/" class="post__tag__link">chrome</a></li><li class="post__tag__item"><a href="/tags/chrome-extension/" class="post__tag__link">chrome-extension</a></li><li class="post__tag__item"><a href="/tags/原创/" class="post__tag__link">原创</a></li></ul><a class="post__foot-link u-fr"></a></footer></article></main><footer class="foot"><div class="foot-copy u-fl">&copy; 2016 Horve<bdi> Theme by <a href="https://github.com/andforce/hexo-theme-andforce" >andforce</a></bdi></div><menu class="page-menu u-fr"><li class="page-menu__item"><span title="Previous" class="page-menu__link icon-arrow-left page-menu__link--disabled"></span></li><li class="page-menu__item"><span title="Next" class="page-menu__link icon-arrow-right page-menu__link--disabled"></span></li></menu></footer></body></html>
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>
