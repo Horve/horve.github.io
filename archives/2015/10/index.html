@@ -632,7 +632,7 @@ function showTime(Counter) {
 				console.log("results:" + JSON.stringify(results));
 				if (results.length == 0) {
 					//var content = '0 ' + $(document.getElementById(url)).text();
-					var content =  results.get('time');
+					var content =  results.get('time') || '0';
 					$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					return;
 				}
@@ -640,7 +640,7 @@ function showTime(Counter) {
 					if (i == 0) {
 						var object = results[i];
 						//var content = object.get('time') + ' ' + $(document.getElementById(url)).text();
-						var content =  object.get('time');
+						var content =  object.get('time') || '0';
 						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					}
 					
@@ -669,7 +669,7 @@ function addCount(Counter) {
 				counter.save(null, {
 					success: function(counter) {
 						// var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
-						var content =  counter.get('time');
+						var content =  counter.get('time') || '0';
 						console.log("0090909090");
 						console.log(counter.get('time'));
 						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
@@ -687,7 +687,7 @@ function addCount(Counter) {
 					success: function(newcounter) {
 					    console.log("newcounter.get('time')="+newcounter.get('time'));
 						//var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
-						var content =  newcounter.get('time');
+						var content =  newcounter.get('time') || '0';
 						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					},
 					error: function(newcounter, error) {
