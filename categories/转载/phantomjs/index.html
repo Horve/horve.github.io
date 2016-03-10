@@ -530,10 +530,11 @@ function showTime(Counter) {
 		query.equalTo("url", url);
 		query.find({
 			success: function(results) {
+				console.log("results:" + results);
 				if (results.length == 0) {
 					//var content = '0 ' + $(document.getElementById(url)).text();
 					var content =  counter.get('time');
-					$(document.getElementById(url)).text(content);
+					$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					return;
 				}
 				for (var i = 0; i < results.length; i++) {
