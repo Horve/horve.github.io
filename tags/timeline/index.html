@@ -583,7 +583,7 @@ function addCount(Counter) {
 					success: function(newcounter) {
 					    console.log("newcounter.get('time')="+newcounter.get('time'));
 						//var content = newcounter.get('time') + ' ' + $(document.getElementById(url)).text();
-						var content =  counter.get('time');
+						var content =  newcounter.get('time');
 						$(document.getElementById(url)).find('.leancloud-visitors-count').text(content);
 					},
 					error: function(newcounter, error) {
