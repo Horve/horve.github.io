@@ -1,12 +1,63 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+<!doctype html>
+
+
+
   
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Horve的前端笔记</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Horve的前端笔记">
 <meta property="og:url" content="http://yoursite.com/index.html">
@@ -15,907 +66,1548 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Horve的前端笔记">
 <meta name="twitter:description">
-  
-    <link rel="alternative" href="/atom.xml" title="Horve的前端笔记" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Horve的前端笔记 </title>
 </head>
 
-<body>
-  <div id="container">
-    <div class="left-col">
-    <div class="overlay"></div>
-<div class="intrude-less">
-	<header id="header" class="inner">
-		<a href="/" class="profilepic">
-			
-			<img lazy-src="/images/headpic.jpg" class="js-avatar">
-			
-		</a>
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
 
-		<hgroup>
-		  <h1 class="header-author"><a href="/">Horve</a></h1>
-		</hgroup>
+  
 
-		
-		<p class="header-subtitle">栽栽花，种种草，每天进来逛一逛</p>
-		
 
-		
-			<div class="switch-btn">
-				<div class="icon">
-					<div class="icon-ctn">
-						<div class="icon-wrap icon-house" data-idx="0">
-							<div class="birdhouse"></div>
-							<div class="birdhouse_holes"></div>
-						</div>
-						<div class="icon-wrap icon-ribbon hide" data-idx="1">
-							<div class="ribbon"></div>
-						</div>
-						
-						<div class="icon-wrap icon-link hide" data-idx="2">
-							<div class="loopback_l"></div>
-							<div class="loopback_r"></div>
-						</div>
-						
-						
-						<div class="icon-wrap icon-me hide" data-idx="3">
-							<div class="user"></div>
-							<div class="shoulder"></div>
-						</div>
-						
-					</div>
-					
-				</div>
-				<div class="tips-box hide">
-					<div class="tips-arrow"></div>
-					<ul class="tips-inner">
-						<li>菜单</li>
-						<li>标签</li>
-						
-						<li>友情链接</li>
-						
-						
-						<li>关于我</li>
-						
-					</ul>
-				</div>
-			</div>
-		
 
-		<div class="switch-area">
-			<div class="switch-wrap">
-				<section class="switch-part switch-part1">
-					<nav class="header-menu">
-						<ul>
-						
-							<li><a href="/">主页</a></li>
-				        
-							<li><a href="/archives">所有文章</a></li>
-				        
-						</ul>
-					</nav>
-					<nav class="header-nav">
-						<div class="social">
-							
-								<a class="github" target="_blank" href="/#" title="github">github</a>
-					        
-								<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
-					        
-								<a class="rss" target="_blank" href="/#" title="rss">rss</a>
-					        
-								<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
-					        
-						</div>
-					</nav>
-				</section>
-				
-				
-				<section class="switch-part switch-part2">
-					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Live-Nodelist/" style="font-size: 10px;">Live Nodelist</a> <a href="/tags/Static-Nodelist/" style="font-size: 10px;">Static Nodelist</a> <a href="/tags/chrome/" style="font-size: 15px;">chrome</a> <a href="/tags/chrome-extension/" style="font-size: 10px;">chrome-extension</a> <a href="/tags/chrome拓展/" style="font-size: 10px;">chrome拓展</a> <a href="/tags/css/" style="font-size: 10px;">css</a> <a href="/tags/domContentLoaded/" style="font-size: 10px;">domContentLoaded</a> <a href="/tags/domready/" style="font-size: 10px;">domready</a> <a href="/tags/event/" style="font-size: 10px;">event</a> <a href="/tags/har/" style="font-size: 10px;">har</a> <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/javascript/" style="font-size: 15px;">javascript</a> <a href="/tags/performance/" style="font-size: 10px;">performance</a> <a href="/tags/phantomjs/" style="font-size: 15px;">phantomjs</a> <a href="/tags/timeline/" style="font-size: 10px;">timeline</a> <a href="/tags/前端性能/" style="font-size: 15px;">前端性能</a> <a href="/tags/原创/" style="font-size: 20px;">原创</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/自定义事件/" style="font-size: 10px;">自定义事件</a> <a href="/tags/转载/" style="font-size: 15px;">转载</a>
-					</div>
-				</section>
-				
-				
-				
-				<section class="switch-part switch-part3">
-					<div id="js-friends">
-					
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">奥巴马的博客</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">卡卡的美丽传说</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">本泽马的博客</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">吉格斯的博客</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">习大大大不同</a>
-			        
-			          <a target="_blank" class="main-nav-link switch-friends-link" href="http://localhost:4000/">托蒂的博客</a>
-			        
-			        </div>
-				</section>
-				
 
-				
-				
-				<section class="switch-part switch-part4">
-				
-					<div id="js-aboutme">我是谁，我从哪里来，我到哪里去？我就是我，是颜色不一样的吃货…</div>
-				</section>
-				
-			</div>
-		</div>
-	</header>				
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Horve的前端笔记</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">栽栽花，种种草，每天进来逛一逛</p>
 </div>
 
-    </div>
-    <div class="mid-col">
-      <nav id="mobile-nav">
-  	<div class="overlay">
-  		<div class="slider-trigger"></div>
-  		<h1 class="header-author js-mobile-header hide">Horve</h1>
-  	</div>
-	<div class="intrude-less">
-		<header id="header" class="inner">
-			<div class="profilepic">
-			
-				<img lazy-src="/images/headpic.jpg" class="js-avatar">
-			
-			</div>
-			<hgroup>
-			  <h1 class="header-author">Horve</h1>
-			</hgroup>
-			
-			<p class="header-subtitle">栽栽花，种种草，每天进来逛一逛</p>
-			
-			<nav class="header-menu">
-				<ul>
-				
-					<li><a href="/">主页</a></li>
-		        
-					<li><a href="/archives">所有文章</a></li>
-		        
-		        <div class="clearfix"></div>
-				</ul>
-			</nav>
-			<nav class="header-nav">
-				<div class="social">
-					
-						<a class="github" target="_blank" href="/#" title="github">github</a>
-			        
-						<a class="weibo" target="_blank" href="/#" title="weibo">weibo</a>
-			        
-						<a class="rss" target="_blank" href="/#" title="rss">rss</a>
-			        
-						<a class="zhihu" target="_blank" href="/#" title="zhihu">zhihu</a>
-			        
-				</div>
-			</nav>
-		</header>				
-	</div>
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
 </nav>
 
-      <div class="body-wrap">
-  
-    <article id="post-fecollection" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/03/02/fecollection/" class="article-date">
-  	<time datetime="2016-03-02T02:31:44.000Z" itemprop="datePublished">2016-03-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+  <section id="posts" class="posts-expand">
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2016/03/02/fecollection/">前端问题汇总</a>
-    </h1>
   
 
-      </header>
-      
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/02/fecollection/" itemprop="url">
+                  前端问题汇总
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-02T10:31:44+08:00" content="2016-03-02">
+              2016-03-02
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <!-- START doctoc generated TOC please keep comment here to allow auto update -->
+      
+
+      
+        
+          <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 <p><strong>Table of Contents</strong>  <em>generated with <a href="http://doctoc.herokuapp.com/">DocToc</a></em><br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/03/02/fecollection/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-2015end" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/01/11/2015end/" class="article-date">
-  	<time datetime="2016-01-11T07:41:30.000Z" itemprop="datePublished">2016-01-11</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/02/fecollection/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2016/01/11/2015end/">2015年年终总结</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>转眼2015年已经过去，不知不觉加入艺龙已有9个月时间。回过头来总结这9个月在艺龙工作的收获和感悟，有遗憾但也有惊喜。这九个月时间的工作带给我的，除了将我从传统的前端开发模式中带入到标准化工程化的开发模式中之外，还让我看到了前端正在经历的深刻变化，让我在身处这样的变化中时不断地自我反思。这九个月也在参与公司和团队的一些业务项目的过程中积累了不少的经验，很多应用到的技术甚至是从零开始，这让我收获颇多，但也因为之前类似项目经验的匮乏让我遇到了不少的问题。但我相信自己已经适应了这种时刻伴随着挑战的工作方式，也很享受这种不断突破自我的过程。</p>
       
     </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/总结/">总结</a></li></ul>
-	</div>
 
+    <div>
       
-
-      
-        <p class="article-more-link">
-          <a  href="/2016/01/11/2015end/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
     </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
+      
 
   
-    <article id="post-custom-event" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2015/11/10/custom-event/" class="article-date">
-  	<time datetime="2015-11-10T09:53:31.000Z" itemprop="datePublished">2015-11-10</time>
-</a>
-    </div>
+
   
-  <div class="article-inner">
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/01/11/2015end/" itemprop="url">
+                  2015年年终总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-01-11T15:41:30+08:00" content="2016-01-11">
+              2016-01-11
+            </time>
+          </span>
+
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>转眼2015年已经过去，不知不觉加入艺龙已有9个月时间。回过头来总结这9个月在艺龙工作的收获和感悟，有遗憾但也有惊喜。这九个月时间的工作带给我的，除了将我从传统的前端开发模式中带入到标准化工程化的开发模式中之外，还让我看到了前端正在经历的深刻变化，让我在身处这样的变化中时不断地自我反思。这九个月也在参与公司和团队的一些业务项目的过程中积累了不少的经验，很多应用到的技术甚至是从零开始，这让我收获颇多，但也因为之前类似项目经验的匮乏让我遇到了不少的问题。但我相信自己已经适应了这种时刻伴随着挑战的工作方式，也很享受这种不断突破自我的过程。</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/01/11/2015end/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/11/10/custom-event/">javascript自定义事件浅析</a>
-    </h1>
   
 
-      </header>
-      
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/11/10/custom-event/" itemprop="url">
+                  javascript自定义事件浅析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-11-10T17:53:31+08:00" content="2015-11-10">
+              2015-11-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/" itemprop="url" rel="index">
+                    <span itemprop="name">原创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <p>在团队协作的很多情况下，某个js的函数会根据不断增加的需求进而不断增加功能，如果功能需求累积过多，我们就很难把控自己在这个函数中新定义的变量会不会覆盖掉之前的定义。如：</p>
+      
+
+      
+        
+          <p>在团队协作的很多情况下，某个js的函数会根据不断增加的需求进而不断增加功能，如果功能需求累积过多，我们就很难把控自己在这个函数中新定义的变量会不会覆盖掉之前的定义。如：</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">1</span>);</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">2</span>);<span class="comment">//新增需求1</span></span><br><span class="line">	<span class="built_in">console</span>.log(<span class="number">3</span>);<span class="comment">//新增需求2</span></span><br><span class="line">	......<span class="comment">//一直增加就很难保证下面的代码不会与之前的代码产生冲突</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>而如果我们为新增的需求重新定义一个同名的js方法，那后来定义的方法又会将之前定义的方法覆盖，这当然也不是我们想要的结果。如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">1</span>);&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">2</span>);&#125;<span class="comment">//新增需求1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">action</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="number">3</span>);&#125;<span class="comment">//新增需求2</span></span><br></pre></td></tr></table></figure></p>
 <p>执行结果：<code>3</code></p>
 <p>那么有没有什么办法可以让我们的函数分别执行，并且互不影响呢？是的，你一定想到了js事件。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/event/">event</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/自定义事件/">自定义事件</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/javascript/">javascript</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/11/10/custom-event/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-timeline" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/10/26/timeline/" class="article-date">
-  	<time datetime="2015-10-26T06:59:25.000Z" itemprop="datePublished">2015-10-26</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/11/10/custom-event/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/10/26/timeline/">使用Chrome DevTools的Timeline分析页面性能</a>
-    </h1>
   
 
-      </header>
-      
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/26/timeline/" itemprop="url">
+                  使用Chrome DevTools的Timeline分析页面性能
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-10-26T14:59:25+08:00" content="2015-10-26">
+              2015-10-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/" itemprop="url" rel="index">
+                    <span itemprop="name">原创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/tools/" itemprop="url" rel="index">
+                    <span itemprop="name">tools</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <p>随着webpage可以承载的表现形式更加多样化，通过webpage来实现更多交互功能，构建web应用程序已经成为很多产品的首要选择。这种方式拥有非常明显的优势：跨平台、开发便捷、便于部署和维护等等，但随着功能的不断积累，web应用程序也会变得越来越复杂。但是，我们仍然想要在webpage支持丰富的呈现形式的同时，让页面效果能够达到&gt;=60fps(帧)/s的刷新频率以避免出现卡顿，就需要我们使用一些比较直观的方式来分析衡量页面的性能问题，为性能优化方案提供依据。</p>
+      
+
+      
+        
+          <p>随着webpage可以承载的表现形式更加多样化，通过webpage来实现更多交互功能，构建web应用程序已经成为很多产品的首要选择。这种方式拥有非常明显的优势：跨平台、开发便捷、便于部署和维护等等，但随着功能的不断积累，web应用程序也会变得越来越复杂。但是，我们仍然想要在webpage支持丰富的呈现形式的同时，让页面效果能够达到&gt;=60fps(帧)/s的刷新频率以避免出现卡顿，就需要我们使用一些比较直观的方式来分析衡量页面的性能问题，为性能优化方案提供依据。</p>
 <blockquote>
 <p>为什么是60fps?<br>我们的目标是保证页面要有高于每秒60fps(帧)的刷新频率，这和目前大多数显示器的刷新率相吻合(60Hz)。如果网页动画能够做到每秒60帧，就会跟显示器同步刷新，达到最佳的视觉效果。这意味着，一秒之内进行60次重新渲染，每次重新渲染的时间不能超过16.66毫秒。</p>
 </blockquote>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/timeline/">timeline</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端性能/">前端性能</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/tools/">tools</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/10/26/timeline/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-domcontentloaded" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/10/17/domcontentloaded/" class="article-date">
-  	<time datetime="2015-10-17T08:01:54.000Z" itemprop="datePublished">2015-10-17</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/10/26/timeline/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
-  
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/10/17/domcontentloaded/">Javascript中的domReady引入机制</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、扯淡部分">一、扯淡部分</h2><p>回想当年，在摆脱写页面时js全靠从各种DEMO中copy出来然后东拼西凑的幽暗岁月之后，毅然决然地打算放弃这种处处“拿来主义”的不正之风，然后开启通往高大上的“前端攻城狮”的飞升之旅。想想都有些小激动呢~然而人生不如意者十之八九，刚踏上征程就经常会被各种Error虐到体无完肤，有时候甚至会被在现在看来很低级的bug折磨得生不如死。但没有一种成长是不需要付出代价的，也就是那段刚跳入泥潭的日子开启了让自己成为一名真正的JSer的大门，也使自己在奔向高大上的路上让“见招拆招、兵来将挡”成为常态，以至于后来都慢慢觉得，做一个东西不遇上几个bug心里就没有稳妥扎实的安全感。再后来也就学着不断去安慰自己：踩到脚底下的bug越多，离翻过那座墙也就不远了~</p>
       
     </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/domContentLoaded/">domContentLoaded</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/domready/">domready</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
-	</div>
 
+    <div>
       
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/domready/">domready</a><a class="article-category-link" href="/categories/原创/domready/domContentLoaded/">domContentLoaded</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/10/17/domcontentloaded/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
     </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
+      
 
   
-    <article id="post-chrome-extension" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <div class="article-meta">
-      <a href="/2015/10/17/chrome-extension/" class="article-date">
-  	<time datetime="2015-10-16T16:06:12.000Z" itemprop="datePublished">2015-10-17</time>
-</a>
-    </div>
+
   
-  <div class="article-inner">
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/10/17/chrome-extension/">chrome拓展开发实战：页面脚本的拦截注入</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>目前公司产品的无线站点已经实现了业务平台组件化，所有业务组件的转场都是通过路由来完成，而各个模块是通过requirejs进行统一管理，在灰度测试时会通过grunt进行打包操作，虽然工程化的开发流程已经大大提升了效率，但是为了满足不同平台在任意业务入口页面一键注入业务脚本即可进行测试的实际需求，团队尝试通过chrome拓展来进行实现。由于我本人是第一次开发chrome拓展插件，所以开发的过程中遇到不少坑，某些功能的实现方式也未必是最好，但还是有很多难得的收获。接下来就围绕“拦截与注入”的功能点，详细介绍一下开发过程。<br>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrome/">chrome</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chrome拓展/">chrome拓展</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/chrome-extension/">chrome-extension</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/10/17/chrome-extension/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-performanceAPI" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/14/performanceAPI/" class="article-date">
-  	<time datetime="2015-09-14T12:15:31.000Z" itemprop="datePublished">2015-09-14</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/09/14/performanceAPI/">使用性能API快速分析web前端性能</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>页面的性能问题一直是产品开发过程中的重要一环，很多公司也一直在使用各种方式监控产品的页面性能。从控制台工具、Fiddler抓包工具，到使用<code>DOMContentLoaded</code>和<code>document.onreadystatechange</code>这种侵入式javascript代码方式来检测DOM事件发生和结束的时间，再到使用第三方工具如<code>WebPagetest</code>、<code>Pingdom</code>等通过在不同的浏览器环境和地域进行测试来寻求优化建议等等，这些方式不仅麻烦，而且测量的指标比较单一。如果有一些可以帮我们直接获取页面性能信息的API出现，并且成为标准被被浏览器厂商支持，那性能监控会不会又是另一幅蓝图？</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/performance/">performance</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/前端性能/">前端性能</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/前端性能/">前端性能</a><a class="article-category-link" href="/categories/原创/前端性能/performanceAPI/">performanceAPI</a><a class="article-category-link" href="/categories/原创/前端性能/performanceAPI/navigation/">navigation</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/14/performanceAPI/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-har-detail" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/08/har-detail/" class="article-date">
-  	<time datetime="2015-09-08T08:28:17.000Z" itemprop="datePublished">2015-09-08</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/17/domcontentloaded/" itemprop="url">
+                  Javascript中的domReady引入机制
+                </a>
+              
+            
+          </h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-10-17T16:01:54+08:00" content="2015-10-17">
+              2015-10-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/" itemprop="url" rel="index">
+                    <span itemprop="name">原创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/domready/" itemprop="url" rel="index">
+                    <span itemprop="name">domready</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/domready/domContentLoaded/" itemprop="url" rel="index">
+                    <span itemprop="name">domContentLoaded</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="一、扯淡部分">一、扯淡部分</h2><p>回想当年，在摆脱写页面时js全靠从各种DEMO中copy出来然后东拼西凑的幽暗岁月之后，毅然决然地打算放弃这种处处“拿来主义”的不正之风，然后开启通往高大上的“前端攻城狮”的飞升之旅。想想都有些小激动呢~然而人生不如意者十之八九，刚踏上征程就经常会被各种Error虐到体无完肤，有时候甚至会被在现在看来很低级的bug折磨得生不如死。但没有一种成长是不需要付出代价的，也就是那段刚跳入泥潭的日子开启了让自己成为一名真正的JSer的大门，也使自己在奔向高大上的路上让“见招拆招、兵来将挡”成为常态，以至于后来都慢慢觉得，做一个东西不遇上几个bug心里就没有稳妥扎实的安全感。再后来也就学着不断去安慰自己：踩到脚底下的bug越多，离翻过那座墙也就不远了~</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/10/17/domcontentloaded/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/09/08/har-detail/">HAR文件详细解析</a>
-    </h1>
   
 
-      </header>
-      
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/17/chrome-extension/" itemprop="url">
+                  chrome拓展开发实战：页面脚本的拦截注入
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-10-17T00:06:12+08:00" content="2015-10-17">
+              2015-10-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/" itemprop="url" rel="index">
+                    <span itemprop="name">原创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/chrome-extension/" itemprop="url" rel="index">
+                    <span itemprop="name">chrome-extension</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <p>HAR（HTTP档案规范），是一个用来储存HTTP请求/响应信息的通用文件格式，基于JSON。这种格式的数据可以使HTTP监测工具以一种通用的格式导出所收集的数据，这些数据可以被其他支持HAR的HTTP分析工具（包括Firebug、httpwatch、Fiddler等）所使用，来分析网站的性能瓶颈。</p>
+      
+
+      
+        
+          <p>目前公司产品的无线站点已经实现了业务平台组件化，所有业务组件的转场都是通过路由来完成，而各个模块是通过requirejs进行统一管理，在灰度测试时会通过grunt进行打包操作，虽然工程化的开发流程已经大大提升了效率，但是为了满足不同平台在任意业务入口页面一键注入业务脚本即可进行测试的实际需求，团队尝试通过chrome拓展来进行实现。由于我本人是第一次开发chrome拓展插件，所以开发的过程中遇到不少坑，某些功能的实现方式也未必是最好，但还是有很多难得的收获。接下来就围绕“拦截与注入”的功能点，详细介绍一下开发过程。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/10/17/chrome-extension/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/09/14/performanceAPI/" itemprop="url">
+                  使用性能API快速分析web前端性能
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-09-14T20:15:31+08:00" content="2015-09-14">
+              2015-09-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/" itemprop="url" rel="index">
+                    <span itemprop="name">原创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/前端性能/" itemprop="url" rel="index">
+                    <span itemprop="name">前端性能</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/前端性能/performanceAPI/" itemprop="url" rel="index">
+                    <span itemprop="name">performanceAPI</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/前端性能/performanceAPI/navigation/" itemprop="url" rel="index">
+                    <span itemprop="name">navigation</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>页面的性能问题一直是产品开发过程中的重要一环，很多公司也一直在使用各种方式监控产品的页面性能。从控制台工具、Fiddler抓包工具，到使用<code>DOMContentLoaded</code>和<code>document.onreadystatechange</code>这种侵入式javascript代码方式来检测DOM事件发生和结束的时间，再到使用第三方工具如<code>WebPagetest</code>、<code>Pingdom</code>等通过在不同的浏览器环境和地域进行测试来寻求优化建议等等，这些方式不仅麻烦，而且测量的指标比较单一。如果有一些可以帮我们直接获取页面性能信息的API出现，并且成为标准被被浏览器厂商支持，那性能监控会不会又是另一幅蓝图？</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/14/performanceAPI/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/09/08/har-detail/" itemprop="url">
+                  HAR文件详细解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-09-08T16:28:17+08:00" content="2015-09-08">
+              2015-09-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/" itemprop="url" rel="index">
+                    <span itemprop="name">原创</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/原创/har/" itemprop="url" rel="index">
+                    <span itemprop="name">har</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>HAR（HTTP档案规范），是一个用来储存HTTP请求/响应信息的通用文件格式，基于JSON。这种格式的数据可以使HTTP监测工具以一种通用的格式导出所收集的数据，这些数据可以被其他支持HAR的HTTP分析工具（包括Firebug、httpwatch、Fiddler等）所使用，来分析网站的性能瓶颈。</p>
 <p>目前HAR规范最新版本为HAR 1.2。HAR文件必须是UTF-8编码，有无BOM无所谓。如下是一个HAR文件的详细介绍。</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/har/">har</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phantomjs/">phantomjs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原创/">原创</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/原创/">原创</a><a class="article-category-link" href="/categories/原创/har/">har</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/08/har-detail/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-html-node-list" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/07/html-node-list/" class="article-date">
-  	<time datetime="2015-09-07T06:50:36.000Z" itemprop="datePublished">2015-09-07</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/08/har-detail/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/09/07/html-node-list/">DOM中的动态NodeList与静态NodeList</a>
-    </h1>
   
 
-      </header>
-      
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/09/07/html-node-list/" itemprop="url">
+                  DOM中的动态NodeList与静态NodeList
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-09-07T14:50:36+08:00" content="2015-09-07">
+              2015-09-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/转载/" itemprop="url" rel="index">
+                    <span itemprop="name">转载</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/转载/html/" itemprop="url" rel="index">
+                    <span itemprop="name">html</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/转载/html/html-node/" itemprop="url" rel="index">
+                    <span itemprop="name">html-node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <h3 id="副标题:_为何getElementsByTagName()比querySelectorAll()快100倍">副标题:  为何getElementsByTagName()比querySelectorAll()快100倍</h3><p>昨天,我在雅虎的同事 <a href="http://www.schillmania.com/">Scott Schiller</a> (斯科特·席勒, 同时也是SoundManager创造者) 发Twitter询问为何 <code>getElementsByTagName(&quot;a&quot;)</code> 在所有浏览器上都比 <code>querySelectorAll(&quot;a&quot;)</code> 要快好多倍。 有一个 专门的 <a href="http://jsperf.com/queryselectorall-vs-getelementsbytagname">JSPerf测试页面</a>, 通过对比就能发现两者的速度差异相当明显。 比如作者在Windows XP下使用的 Firefox 3.6.8 浏览器, <code>querySelectorAll(&quot;a&quot;)</code> 比 <code>getElementsByTagName(&quot;a&quot;)</code> 的运行速度要低98%. 我和 Scott, 以及 YUI团队的 <a href="http://www.wonko.com/">Ryan Grove</a> 有一个活跃的Twitter-sation， 关于这种现象的原因,以及情理之中让人沮丧的结果。 我想好好地解释说明下到底为什么会发生这种情况,以及为什么未来也可能不会改变。</p>
+      
+
+      
+        
+          <h3 id="副标题:_为何getElementsByTagName()比querySelectorAll()快100倍">副标题:  为何getElementsByTagName()比querySelectorAll()快100倍</h3><p>昨天,我在雅虎的同事 <a href="http://www.schillmania.com/">Scott Schiller</a> (斯科特·席勒, 同时也是SoundManager创造者) 发Twitter询问为何 <code>getElementsByTagName(&quot;a&quot;)</code> 在所有浏览器上都比 <code>querySelectorAll(&quot;a&quot;)</code> 要快好多倍。 有一个 专门的 <a href="http://jsperf.com/queryselectorall-vs-getelementsbytagname">JSPerf测试页面</a>, 通过对比就能发现两者的速度差异相当明显。 比如作者在Windows XP下使用的 Firefox 3.6.8 浏览器, <code>querySelectorAll(&quot;a&quot;)</code> 比 <code>getElementsByTagName(&quot;a&quot;)</code> 的运行速度要低98%. 我和 Scott, 以及 YUI团队的 <a href="http://www.wonko.com/">Ryan Grove</a> 有一个活跃的Twitter-sation， 关于这种现象的原因,以及情理之中让人沮丧的结果。 我想好好地解释说明下到底为什么会发生这种情况,以及为什么未来也可能不会改变。</p>
 <p>在深入细节之前需要了解这两个方法间一个非常重要的区别,我想说的并不是他们接收的参数一个是标签名,另一个是整个CSS选择器。 而其<strong>最大的区别在于返回值的不同</strong>: <code>getElementsByTagName()</code> 方法返回一个动态的(live) <code>NodeList</code>,  而 <code>querySelectorAll()</code> 返回的是一个静态的(static) <code>NodeList</code>. 理解这一点是非常必要的.</p>
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Live-Nodelist/">Live Nodelist</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Static-Nodelist/">Static Nodelist</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/转载/">转载</a><a class="article-category-link" href="/categories/转载/html/">html</a><a class="article-category-link" href="/categories/转载/html/html-node/">html-node</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/07/html-node-list/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-phantomjs" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2015/09/06/phantomjs/" class="article-date">
-  	<time datetime="2015-09-06T08:01:54.000Z" itemprop="datePublished">2015-09-06</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/07/html-node-list/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
   
-    <h1 itemprop="name">
-      <a class="article-title art-list-title" href="/2015/09/06/phantomjs/">phantomjs 使用介绍</a>
-    </h1>
   
 
-      </header>
-      
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
     
-    <div class="article-entry" itemprop="articleBody">
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/09/06/phantomjs/" itemprop="url">
+                  phantomjs 使用介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-09-06T16:01:54+08:00" content="2015-09-06">
+              2015-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/转载/" itemprop="url" rel="index">
+                    <span itemprop="name">转载</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/转载/phantomjs/" itemprop="url" rel="index">
+                    <span itemprop="name">phantomjs</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/转载/phantomjs/前端性能/" itemprop="url" rel="index">
+                    <span itemprop="name">前端性能</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
-        <p><img src="/images/phantomjs/phantomjs-1.jpg" alt="phantomjs"></p>
+      
+
+      
+        
+          <p><img src="/images/phantomjs/phantomjs-1.jpg" alt="phantomjs"></p>
 <h2 id="概述">概述</h2><p>有时，我们需要浏览器处理网页，但并不需要浏览，比如生成网页的截图、抓取网页数据等操作。<a href="http://phantomjs.org/">PhantomJS</a>的功能，就是提供一个浏览器环境的命令行接口，你可以把它看作一个“虚拟浏览器”，除了不能浏览，其他与正常浏览器一样。它的内核是WebKit引擎，不提供图形界面，只能在命令行下使用，我们可以用它完成一些特殊的用途。</p>
 <p>PhantomJS是二进制程序，需要<a href="http://phantomjs.org/download.html">安装</a>后使用。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install phantomjs -g</span><br></pre></td></tr></table></figure>
 <p>使用下面的命令，查看是否安装成功。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ phantomjs --version</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/06/phantomjs/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
       
     </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phantomjs/">phantomjs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
-	</div>
 
+    <div>
       
-	<div class="article-category tagcloud">
-	<a class="article-category-link" href="/categories/转载/">转载</a><a class="article-category-link" href="/categories/转载/phantomjs/">phantomjs</a><a class="article-category-link" href="/categories/转载/phantomjs/前端性能/">前端性能</a>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a  href="/2015/09/06/phantomjs/#more">more >></a>
-        </p>
-      
-      <div class="clearfix"></div>
     </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
+  </section>
+
+  
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+
+
+          </div>
+          
+
+
+          
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
   </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/headpic.jpg"
+               alt="Horve" />
+          <p class="site-author-name" itemprop="name">Horve</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+      </section>
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
   
-</article>
-
-
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Horve</span>
 </div>
-      <footer id="footer">
-  <div class="outer">
-    <div id="footer-info">
-    	<div class="footer-left">
-    		&copy; 2016 Horve
-    	</div>
-      	<div class="footer-right">
-      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
     </div>
   </div>
-  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-</footer>
-    </div>
-    
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  
 
 
-<script>
-	var yiliaConfig = {
-		fancybox: true,
-		mathjax: true,
-		animate: true,
-		isHome: true,
-		isPost: false,
-		isArchive: false,
-		isTag: false,
-		isCategory: false,
-		open_in_new: false
-	}
-</script>
-<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js" type="text/javascript"></script>
-<script src="/js/main.js" type="text/javascript"></script>
+  
 
 
 
 
-
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';                 
-    }       
-});
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
 </script>
 
 
-  </div>
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+
 </body>
 </html>
