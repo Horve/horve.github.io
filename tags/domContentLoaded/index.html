@@ -1,409 +1,50 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next muse use-motion">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
-
-
-
-
-
-
-
-
-
-  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
-
-
-
-
-  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-
-
-
-<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Hexo, NexT" />
-
-
-
-
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
-
-
-
-
-
-
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Horve的前端笔记">
-<meta property="og:url" content="http://yoursite.com/tags/domContentLoaded/index.html">
-<meta property="og:site_name" content="Horve的前端笔记">
-<meta property="og:description">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Horve的前端笔记">
-<meta name="twitter:description">
-
-
-
-<script type="text/javascript" id="hexo.configuration">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    scheme: 'Muse',
-    sidebar: {"position":"left","display":"post"},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 0,
-      author: '博主'
-    }
-  };
-</script>
-
-  <title> 标签: domContentLoaded | Horve的前端笔记 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
-  
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-  <div class="container one-collumn sidebar-position-left  ">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-meta ">
-  
-
-  <div class="custom-logo-site-title">
-    <a href="/"  class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <span class="site-title">Horve的前端笔记</span>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-  <p class="site-subtitle">栽栽花，种种草，每天进来逛一逛</p>
-</div>
-
-<div class="site-nav-toggle">
-  <button>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-    <span class="btn-bar"></span>
-  </button>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
-            
-            归档
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
-            
-            标签
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        domContentLoaded
-        <small>标签</small>
-      </h2>
-    </div>
-
-    
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2015/10/17/domcontentloaded/" itemprop="url">
-              
-                <span itemprop="name">Javascript中的domReady引入机制</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2015-10-17T16:01:54+08:00"
-              content="2015-10-17" >
-          10-17
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-    
-  </div>
-
-  
-
-
-          </div>
-          
-
-
-          
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/images/headpic.jpg"
-               alt="Horve" />
-          <p class="site-author-name" itemprop="name">Horve</p>
-          <p class="site-description motion-element" itemprop="description"></p>
-        </div>
-        <nav class="site-state motion-element">
-          <div class="site-state-item site-state-posts">
-            <a href="/archives">
-              <span class="site-state-item-count">11</span>
-              <span class="site-state-item-name">日志</span>
-            </a>
-          </div>
-          
-          
-            <div class="site-state-item site-state-categories">
-              
-                <span class="site-state-item-count">16</span>
-                <span class="site-state-item-name">分类</span>
-              
-            </div>
-          
-
-          
-            <div class="site-state-item site-state-tags">
-              <a href="/tags">
-                <span class="site-state-item-count">20</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-        
-        
-
-        <div class="links-of-author motion-element">
-          
-        </div>
-
-      </section>
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2016</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Horve</span>
-</div>
-
-<div class="powered-by">
-  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
-</div>
-
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
-  </a>
-</div>
-
-
-
-      </div>
-    </footer>
-
-    <div class="back-to-top">
-      <i class="fa fa-arrow-up"></i>
-    </div>
-  </div>
-
-  
-
-
-  
-
-
-
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
-
-  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
-
-  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
-
-
-
-  
-  
-
-  
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
-
-
-
-  
-
-
-
-  
-
-
-
-  
-  
-  
-
-  
-
-
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="alternative" href="/atom.xml" title="Horve的前端笔记" type="application/atom+xml"><link rel="icon" href="/favicon.png"><title>domContentLoaded - Horve的前端笔记</title><link rel="stylesheet" href="/css/main.css" type="text/css"><!--[if lt IE 9]><script>(function(a,b){a="abbr article aside audio bdi canvas data datalist details dialog figcaption figure footer header hgroup main mark meter nav output progress section summary template time video".split(" ");for(b=a.length-1;b>=0;b--)document.createElement(a[b])})()</script><![endif]--></head><body><header class="head"><h1 class="head-title u-fl"><a href="/">Horve的前端笔记</a></h1><nav class="head-nav u-fr"><ul class="head-nav__list"><li class="head-nav__item"><a href="/archives" class="head-nav__link">文章</a></li><li class="head-nav__item"><a href="http://weibo.com/andforce" class="head-nav__link">微博</a></li><li class="head-nav__item"><a href="https://github.com/andforce" class="head-nav__link">GitHub</a></li><li class="head-nav__item"><a href="https://bintray.com/andforce" class="head-nav__link">Bintray</a></li></ul></nav></header><main class="main"><article class="post"><header class="post__head"><time datetime="2015-10-17T08:01:54.000Z" class="post__time">October 17, 2015</time><h1 class="post__title"><a href="/2015/10/17/domcontentloaded/">Javascript中的domReady引入机制</a></h1><hr/></header><div class="post__main echo"><h2 id="一、扯淡部分">一、扯淡部分</h2><p>回想当年，在摆脱写页面时js全靠从各种DEMO中copy出来然后东拼西凑的幽暗岁月之后，毅然决然地打算放弃这种处处“拿来主义”的不正之风，然后开启通往高大上的“前端攻城狮”的飞升之旅。想想都有些小激动呢~然而人生不如意者十之八九，刚踏上征程就经常会被各种Error虐到体无完肤，有时候甚至会被在现在看来很低级的bug折磨得生不如死。但没有一种成长是不需要付出代价的，也就是那段刚跳入泥潭的日子开启了让自己成为一名真正的JSer的大门，也使自己在奔向高大上的路上让“见招拆招、兵来将挡”成为常态，以至于后来都慢慢觉得，做一个东西不遇上几个bug心里就没有稳妥扎实的安全感。再后来也就学着不断去安慰自己：踩到脚底下的bug越多，离翻过那座墙也就不远了~</p>
+<a id="more"></a>
+<p>回望一路走来的林林种种，有一个bug大概是每个JSer在初入大门时都遇到过的。那就是用js获取页面元素的时候经常会报出一个<code>TypeError:Cannot read property ‘XXX’of null.</code>大意就是根本就没找到你要找的元素，更别说你要对它进行操作了。明明页面上有这个元素，但在js里偏偏获取不到，这让很多刚接触js不久的童鞋都伤透了脑筋，于是疯狂百度谷歌，最后才发现造成这个低级bug的始作俑者竟然是<code>window.onload</code>，也就是文档未就绪，DOM树还没有建完就开始对节点进行操作从而导致的错误。</p>
+<p>扯了那么多，终于扯到跟本文主题相干的东西了：<code>domReady</code>，也就是所谓的“文档就绪”。我们对DOM节点的任何操作在DOM树创建之后就可以进行。在理解这个概念之前，我们先来看看浏览器在载入一个文档时是怎么对HTML进行解析的。</p>
+<h2 id="二、浏览器渲染引擎的HTML解析流程">二、浏览器渲染引擎的HTML解析流程</h2><p>何谓“渲染”，其实就是浏览器把请求到的HTML内容显示出来的过程。渲染引擎首先通过网络获得所请求文档的内容，通常以8K分块的方式完成。下面是渲染引擎在取得内容之后的基本流程：</p>
+<blockquote>
+<p>1，解析html以构建dom树（构建DOM节点）：渲染引擎开始解析html，并将标签转化为内容树中的dom节点。</p>
+<p>2，构建render树（解析样式信息）：解析外部CSS文件及style标签中的样式信息。Render树由一些包含有各种属性的矩形组成，它们将被按照正确的顺序显示到屏幕上。</p>
+<p>3，布局render树（布局DOM节点）：执行布局过程，它将确定每个节点在屏幕上的确切坐标。</p>
+<p>4，绘制render树（绘制DOM节点）：Render树构建好了之后，将会再下一步就是绘制，即遍历render树，并使用UI后端层绘制每个节点。</p>
+</blockquote>
+<p>以上就是HTML渲染的基本流程（详情请移步至“<a href="http://kb.cnblogs.com/page/129756/" target="_blank" rel="external">浏览器内部工作原理</a>”），但这并不包含解析过程中浏览器加载外部资源如图片、脚本、iframe等的过程。说白了，上面的四步仅仅是HTML结构的渲染流程，而外部资源的加载在HTML结构的渲染流程中贯穿始终，即便绘制DOM节点已经完成，外部资源依然可能正在加载中或尚未加载。</p>
+<h2 id="三、window-onload">三、window.onload</h2><p>了解了浏览器渲染引擎的HTML解析流程，我们就回到domReady。前文提到了，那个蛋疼的TypeError是由于在DOM树构建完成之前对节点进行了操作，而通常的解决的办法就是让js在window.onload的回调里执行，也就是说，在文档所有的解析渲染、资源加载完成之前，不让js脚本执行，这样一来就妥妥地避免了因js操作先于DOM树创建而带来的bug：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Window.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="comment">//doSomething</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的解决办法应该是初学原生js时很多人最常用的解决办法，看起来也的确没什么问题。如果文档外部资源不多的时候也没什么问题，但，我们来做一个假设。假设一个页面上有100张远程图片，我需要让js做到在点击每张图片时alert出图片的src属性，又该怎么做？</p>
+<p>是不是已经发现点小问题了？按照第二部分内容对浏览器解析渲染HTML流程的介绍，DOM树很快就构建完毕了，而100张图片还在缓慢地加载。而要想执行alert出图片src属性的js，则需要等到100张图片全部加载完成后才能执行。而在这期间，页面元素不会响应你的任何操作，就好像“死”了一样。如果是在实际项目中，用户很可能不会等到你页面所有东东加载完以后才去操作，在面对一个不会对自己的操作做任何响应的页面，唯一比较解气的方式就是——果断关掉~然后……就没有了然后。</p>
+<p>所以在实际应用中，我们经常会遇到这样的场景，让页面加载后去做一些事情：绑定事件、DOM操作某些结点等。使用<code>window.onload</code>对于很多实际的应用而言有点太“迟”了，比较影响用户体验。那有没有更好的方法解决这个问题？比如提前到只要DOM树创建完成之后就可以进行如上操作呢？答案当然是有的：<code>DOMContentLoaded</code>事件。</p>
+<h2 id="四、DOMContentLoaded">四、DOMContentLoaded</h2><p>说这个之前必须要提一下jQuery中的<code>domReady</code>机制。很多时候在使用jq也会出现最前面出现的那个<code>TypeError</code>，解决办法就是把js放到jQuery的ready回调里：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;);</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;...&#125;);</span><br></pre></td></tr></table></figure>
+<p>这样一来，错误妥妥地没了。然后对比因果关系，大概得出一个结论：jQuery的ready回调应该跟<code>window.onload</code>的效果原理是一样的。恩，应该是这样。那我们就先来看一看jQuery（1.11.1）的<code>ready</code>回调是如何实现的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">jQuery.fn.ready = <span class="function"><span class="keyword">function</span>(<span class="params"> fn </span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Add the callback</span></span><br><span class="line">    jQuery.ready.promise().done( fn );</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br><span class="line">jQuery.ready.promise = <span class="function"><span class="keyword">function</span>(<span class="params"> obj </span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ( !readyList ) &#123;</span><br><span class="line">        readyList = jQuery.Deferred();</span><br><span class="line">        <span class="keyword">if</span> ( <span class="built_in">document</span>.readyState === <span class="string">"complete"</span> ) &#123;</span><br><span class="line">            setTimeout( jQuery.ready );</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ( <span class="built_in">document</span>.addEventListener ) &#123;</span><br><span class="line">            <span class="built_in">document</span>.addEventListener( <span class="string">"DOMContentLoaded"</span>, completed, <span class="literal">false</span> );</span><br><span class="line">            <span class="built_in">window</span>.addEventListener( <span class="string">"load"</span>, completed, <span class="literal">false</span> );</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">document</span>.attachEvent( <span class="string">"onreadystatechange"</span>, completed );</span><br><span class="line">            <span class="built_in">window</span>.attachEvent( <span class="string">"onload"</span>, completed );</span><br><span class="line">            <span class="keyword">var</span> top = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                top = <span class="built_in">window</span>.frameElement == <span class="literal">null</span> &amp;&amp; <span class="built_in">document</span>.documentElement;</span><br><span class="line">            &#125; <span class="keyword">catch</span>(e) &#123;&#125;</span><br><span class="line">            <span class="keyword">if</span> ( top &amp;&amp; top.doScroll ) &#123;</span><br><span class="line">                (<span class="function"><span class="keyword">function</span> <span class="title">doScrollCheck</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> ( !jQuery.isReady ) &#123;</span><br><span class="line">                        <span class="keyword">try</span> &#123;</span><br><span class="line">                            <span class="comment">// Use the trick by Diego Perini</span></span><br><span class="line">                            top.doScroll(<span class="string">"left"</span>);</span><br><span class="line">                        &#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">                            <span class="keyword">return</span> setTimeout( doScrollCheck, <span class="number">50</span> );</span><br><span class="line">                        &#125;</span><br><span class="line">                        detach();</span><br><span class="line">                        jQuery.ready();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> readyList.promise( obj );</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>看起来比想象中的<code>window.onload</code>要复杂呵。Jq的源码中出现了<code>DOMContentLoaded</code>、<code>readyState</code>、<code>onreadystatechange</code>，这些跟<code>domReady</code>有什么关系？</p>
+<p>我们还是先从<code>DOMContentLoaded</code>说起吧。就如前面所述，很多时候我们会把js逻辑写在<code>window.onload</code>回调中，以防DOM树还没有建完就开始对节点进行操作从而导致错误，而对于很多实际应用来说，越早介入对DOM的干涉就越好，比如进行特征侦测、事件绑定、DOM操作神马的。domReady还可以满足用户提前绑定事件的需求，因为有些情况下页面的图片等外部资源过多，<code>window.onload</code>迟迟不能触发，这时若还没有绑定事件，用户点任何的按钮都没反应（链接除外）会直接影响体验。</p>
+<p>为了解决<code>window.onload</code>的短板，FF中便增加了一个<code>DOMContentLoaded</code>方法，与<code>onload</code>相比，<code>DOMContentLoaded</code>方法触发的时间更早，它是在页面的DOM树创建完成后（也就是HTML解析第一步完成）即触发，而无需等待其他资源的加载。Webkit引擎从版本525（Webkit nightly 1/2008:525+）开始也引入了该事件，Opera中也包含该方法。到目前为止NB的IE仍然没有要添加的意思。虽然IE下没有，但解决办法总是有的。于是对于那些忙前忙后的兼容小达人和死不悔改的顽固派，也就有了两套策略：</p>
+<ul>
+<li><p>1）支持DOMContentLoaded事件的，就使用DOMContentLoaded事件；</p>
+</li>
+<li><p>2）不支持的，就用来自Diego Perini发现的著名Hack兼容。兼容原理大概就是，通过IE中的<code>document.documentElement.doScroll(‘left’)</code>来判断DOM树是否创建完毕。</p>
+</li>
+</ul>
+<p>Blabla了这么多，来看个IE模拟<code>DOMContentLoaded</code>例子吧。这个例子就来自上面发现IE下<code>doScroll Hackd</code>的作者，细看也就是简化版的<code>jQuery.ready</code>回调的IE处理逻辑。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">IEContentLoaded</span> (<span class="params">w, fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> d = w.document, done = <span class="literal">false</span>,</span><br><span class="line">    <span class="comment">// 只执行一次用户的回调函数init()</span></span><br><span class="line">    init = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!done) &#123;</span><br><span class="line">            done = <span class="literal">true</span>;</span><br><span class="line">            fn();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// DOM树未创建完之前调用doScroll会抛出错误</span></span><br><span class="line">            d.documentElement.doScroll(<span class="string">'left'</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">            <span class="comment">//延迟再试一次~</span></span><br><span class="line">            setTimeout(<span class="built_in">arguments</span>.callee, <span class="number">50</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 没有错误就表示DOM树创建完毕，然后立马执行用户回调</span></span><br><span class="line">        init();</span><br><span class="line">    &#125;)();</span><br><span class="line">    <span class="comment">//监听document的加载状态</span></span><br><span class="line">    d.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 如果用户是在domReady之后绑定的函数，就立马执行</span></span><br><span class="line">        <span class="keyword">if</span> (d.readyState == <span class="string">'complete'</span>) &#123;</span><br><span class="line">            d.onreadystatechange = <span class="literal">null</span>;</span><br><span class="line">            init();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而对于高大上的chrome、ff等高级浏览器来说，对<code>DOMContentLoaded</code>事件的处理就相对来说小case了，按照标准的事件绑定方式就可以处理：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( <span class="built_in">document</span>.addEventListener ) &#123;</span><br><span class="line">    <span class="built_in">document</span>.addEventListener( <span class="string">"DOMContentLoaded"</span>, completed, <span class="literal">false</span> );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="五、实例">五、实例</h2><p>看到这，想必大家已经对<code>DOMContentLoaded</code>已经有了新的认识，<code>onload</code>保险丝也该适时换成智能电门啦~接下来就来个鲜活的例子，来让大家更清晰的做下对比。</p>
+<p>首先，页面上有一组图片：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/01.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/02.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/03.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/04.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"img/05.jpg"</span> /&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>页面的js处理逻辑：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">    <span class="keyword">var</span> d = <span class="built_in">document</span>;</span><br><span class="line">    <span class="keyword">var</span> msgBox = d.getElementById(<span class="string">"showMsg"</span>);</span><br><span class="line">    <span class="keyword">var</span> imgs = d.getElementsByTagName(<span class="string">"img"</span>);</span><br><span class="line">    <span class="keyword">var</span> time1 = <span class="literal">null</span>,time2 = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">if</span>(d.addEventListener)&#123;</span><br><span class="line">        d.addEventListener(<span class="string">"DOMContentLoaded"</span>,domReady,<span class="literal">false</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        IEContentLoaded(domReady);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">domReady</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        msgBox.innerHTML += <span class="string">"dom已加载！&lt;br&gt;"</span>;</span><br><span class="line">        time1 = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">        msgBox.innerHTML += <span class="string">"时间戳："</span> + time1 + <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="comment">//兼容IE的domReady</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">IEContentLoaded</span>(<span class="params">fn</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> done = <span class="literal">false</span>,</span><br><span class="line">        init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">if</span>(!done)&#123;</span><br><span class="line">                done = <span class="literal">true</span>;</span><br><span class="line">                fn();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        (<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                d.documentElement.doScroll(<span class="string">'left'</span>);</span><br><span class="line">            &#125;<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">                setTimeout(<span class="built_in">arguments</span>.callee,<span class="number">50</span>);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            init();</span><br><span class="line">        &#125;)(); </span><br><span class="line">        d.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            msgBox.innerHTML += <span class="string">"加载状态："</span> + d.readyState + <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">            <span class="keyword">if</span>(d.readyState == <span class="string">'complete'</span>)&#123;</span><br><span class="line">                d.onreadystatechange = <span class="literal">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        msgBox.innerHTML += <span class="string">"onload已加载！&lt;br&gt;"</span>;</span><br><span class="line">        time2 = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">        msgBox.innerHTML += <span class="string">"时间戳："</span> + time2 + <span class="string">"&lt;br&gt;"</span>;</span><br><span class="line">        msgBox.innerHTML +=<span class="string">"domReady比onload快："</span> + (time2 - time1) + <span class="string">"ms&lt;br&gt;"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;<span class="regexp">/script&gt;</span></span><br></pre></td></tr></table></figure>
+<p>相信js脚本不用做过多解释，在前面都已做过详细分析，我们直接来看运行结果：</p>
+<p><img src="/images/1510171431.png" alt="运行结果"></p>
+<p>很容易就能看出，<code>DOMContentLoaded</code>执行5238ms之后才执行的<code>onload</code>。这只是一个DEMO的差距，而如果是更大型的应用，可能这个时间差距会更大。</p>
+<h2 id="最后">最后</h2><p>这就是本文所分享的domReady引入的机制，有兴趣的可以继续移步如下链接。希望本文能为你提供到帮助，也希望与读者多多交流。如文中内容有误，请评论告知~谢谢。</p>
+<p>浏览器内部工作原理：</p>
+<p><a href="http://kb.cnblogs.com/page/129756/" target="_blank" rel="external">http://kb.cnblogs.com/page/129756/</a></p>
+<p>司徒正美《javascript的事件加载》：</p>
+<p><a href="http://www.cnblogs.com/rubylouvre/archive/2009/08/26/1554204.html" target="_blank" rel="external">http://www.cnblogs.com/rubylouvre/archive/2009/08/26/1554204.html</a></p>
+</div><footer class="post__foot u-cf"><ul class="post__tag u-fl"><li class="post__tag__item"><a href="/tags/domContentLoaded/" class="post__tag__link">domContentLoaded</a></li><li class="post__tag__item"><a href="/tags/domready/" class="post__tag__link">domready</a></li><li class="post__tag__item"><a href="/tags/javascript/" class="post__tag__link">javascript</a></li></ul><a class="post__foot-link u-fr"></a></footer></article></main><footer class="foot"><div class="foot-copy u-fl">&copy; 2016 Horve<bdi> Theme by <a href="https://github.com/andforce/hexo-theme-andforce" >andforce</a></bdi></div><menu class="page-menu u-fr"><li class="page-menu__item"><span title="Previous" class="page-menu__link icon-arrow-left page-menu__link--disabled"></span></li><li class="page-menu__item"><span title="Next" class="page-menu__link icon-arrow-right page-menu__link--disabled"></span></li></menu></footer></body></html>
